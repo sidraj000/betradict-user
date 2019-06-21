@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#EBE7E7"
+    android:id="@+id/drawer"
+    tools:context=".MainActivity">
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/transmanin"></RelativeLayout>
+<!--
+        <android.support.v4.view.ViewPager
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/container"
+            />-->
+        <ImageView
+            android:id="@+id/btnnnn"
+            android:layout_width="22dp"
+            android:layout_height="50dp"
+            android:src="@mipmap/navimage"/>
+        <ImageView
+            android:id="@+id/btnToggle"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="30dp"
+            android:src="@drawable/in" />
+
+    </RelativeLayout>
+    <android.support.design.widget.NavigationView
+        app:headerLayout="@layout/header"
+        android:id="@+id/nav_view"
+        android:layout_width="280dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:menu="@menu/nav_menu"></android.support.design.widget.NavigationView>
+
+</android.support.v4.widget.DrawerLayout>

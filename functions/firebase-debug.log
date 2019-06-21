@@ -1,0 +1,55 @@
+[debug] [2019-06-15T06:52:56.910Z] ----------------------------------------------------------------------
+[debug] [2019-06-15T06:52:56.914Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\siddh\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js serve --only functions
+[debug] [2019-06-15T06:52:56.915Z] CLI Version:   7.0.0
+[debug] [2019-06-15T06:52:56.915Z] Platform:      win32
+[debug] [2019-06-15T06:52:56.915Z] Node Version:  v10.16.0
+[debug] [2019-06-15T06:52:56.916Z] Time:          Sat Jun 15 2019 12:22:56 GMT+0530 (India Standard Time)
+[debug] [2019-06-15T06:52:56.916Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-06-15T06:52:56.930Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-06-15T06:52:56.930Z] > authorizing via signed-in user
+[debug] [2019-06-15T06:52:56.930Z] [iam] checking project betradict-af789 for permissions ["firebase.projects.get"]
+[debug] [2019-06-15T06:52:56.932Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2019-06-15T06:52:56.932Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2019-06-15T06:52:57.504Z] <<< HTTP RESPONSE 200
+[debug] [2019-06-15T06:52:57.517Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/betradict-af789:testIamPermissions  
+
+[debug] [2019-06-15T06:52:59.769Z] <<< HTTP RESPONSE 200
+[debug] [2019-06-15T06:52:59.771Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/betradict-af789  
+ 
+[debug] [2019-06-15T06:53:01.817Z] <<< HTTP RESPONSE 200
+[warn] !  Your requested "node" version "8" doesn't match your global version "10"
+[debug] [2019-06-15T06:53:01.843Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/604408055224:getServerAppConfig  
+ 
+[debug] [2019-06-15T06:53:02.636Z] <<< HTTP RESPONSE 200
+[info] +  functions: Emulator started at http://localhost:5000
+[info] i  functions: Watching "C:\Users\siddh\Documents\BeTraDict\functions" for Cloud Functions...
+[debug] [2019-06-15T06:53:03.019Z] Functions runtime initialized.
+[debug] [2019-06-15T06:53:03.020Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-15T06:53:03.160Z] firebase-admin has been stubbed.
+[info] i  functions: HTTP trigger initialized at http://localhost:5000/betradict-af789/us-central1/writeWeather
+[debug] [2019-06-15T06:54:35.929Z] Accepted request GET /betradict-af789/us-central1/writeWeather --> writeWeather
+[debug] [2019-06-15T06:54:36.712Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "writeWeather"
+[debug] [2019-06-15T06:54:36.721Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-15T06:54:36.880Z] firebase-admin has been stubbed.
+[debug] [2019-06-15T06:54:36.920Z] Trigger "writeWeather" has been found, beginning invocation!
+[debug] [2019-06-15T06:54:36.920Z] 
+[debug] [2019-06-15T06:54:36.921Z] Running writeWeather in mode HTTPS
+[debug] [2019-06-15T06:54:36.941Z] {"socketPath":"\\\\?\\pipe\\C:\\Users\\siddh\\Documents\\BeTraDict\\functions\\14684"}
+[debug] [2019-06-15T06:54:36.945Z] [functions] Runtime ready! Sending request! {"socketPath":"\\\\?\\pipe\\C:\\Users\\siddh\\Documents\\BeTraDict\\functions\\14684"}
+[debug] [2019-06-15T06:54:36.961Z] Ephemeral server used!
+[debug] [2019-06-15T06:54:36.962Z] Bodyundefined
+[debug] [2019-06-15T06:54:37.904Z] Ephemeral server survived.
+[info] >  Sat, 15 Jun 2019 06:54:38 GMT express deprecated res.send(status): Use res.sendStatus(status) instead at lib\index.js:13:18
+[info] i  functions: Finished "writeWeather" in ~1s
+[info] >  (node:14684) UnhandledPromiseRejectionWarning: Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+[info] >      at ServerResponse.setHeader (_http_outgoing.js:470:11)
+[info] >      at ServerResponse.header (C:\Users\siddh\AppData\Roaming\npm\node_modules\firebase-tools\node_modules\express\lib\response.js:771:10)
+[info] >      at ServerResponse.send (C:\Users\siddh\AppData\Roaming\npm\node_modules\firebase-tools\node_modules\express\lib\response.js:170:12)
+[info] >      at ServerResponse.json (C:\Users\siddh\AppData\Roaming\npm\node_modules\firebase-tools\node_modules\express\lib\response.js:267:15)
+[info] >      at ServerResponse.send (C:\Users\siddh\AppData\Roaming\npm\node_modules\firebase-tools\node_modules\express\lib\response.js:158:21)
+[info] >      at p2.catch.error (C:\Users\siddh\Documents\BeTraDict\functions\lib\index.js:13:28)
+[info] >  (node:14684) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 2)
+[info] >  (node:14684) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
