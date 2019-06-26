@@ -25,6 +25,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,8 +47,12 @@ public class LeaderBoard extends Fragment {
     public Wallet wallet = new Wallet();
     public Bundle b;
     public String arr[];
-
+    public List<Integer> amtlist=new ArrayList<>();
+    public List<String> userarr=new ArrayList<>();
+    DatabaseReference reference;
     final String uId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    public List<User> mUser=new ArrayList<>();
+    public List<String> mKey=new ArrayList<>();
 
 
     public LeaderBoard() {
@@ -62,14 +67,16 @@ public class LeaderBoard extends Fragment {
         View view = inflater.inflate(R.layout.fragment_leader_board, container, false);
         mRecycler = view.findViewById(R.id.leaderlist);
         muser = FirebaseAuth.getInstance().getCurrentUser();
-
+        b=getArguments();
+        arr=b.getStringArray("details");
         mFriendsReference = FirebaseDatabase.getInstance().getReference()
-                .child("users");
+                .child("LeaderBoard").child(arr[1]).child(arr[2]+arr[3]);
         mManager = new LinearLayoutManager(getContext());
         mManager.setReverseLayout(true);
         mManager.setStackFromEnd(true);
         mRecycler.setHasFixedSize(true);
         mRecycler.setLayoutManager(mManager);
+        reference=FirebaseDatabase.getInstance().getReference();
 
         return view;
     }
@@ -80,6 +87,7 @@ public class LeaderBoard extends Fragment {
 
         mAdapter = new LeaderAdapter(getContext(), mFriendsReference);
         mRecycler.setAdapter(mAdapter);
+
     }
 
     @Override
@@ -99,7 +107,6 @@ public class LeaderBoard extends Fragment {
             tvName = itemView.findViewById(R.id.tvName);
             ivPic = itemView.findViewById(R.id.ivPic);
             tvLastMatch=itemView.findViewById(R.id.tvBalPerMatch);
-
         }
     }
 
@@ -107,30 +114,26 @@ public class LeaderBoard extends Fragment {
 
     public Context mContext;
     public  DatabaseReference mDatabaseReference;
-    public List<User> mUser=new ArrayList<>();
+    public List<LeaderBAmt> mLeaderBoard=new ArrayList<>();
     public List<String> mKey=new ArrayList<>();
 
         public LeaderAdapter(final Context context, DatabaseReference ref) {
             mContext = context;
             mDatabaseReference = ref;
-            Query query=mDatabaseReference.orderByChild("wallet/balance").limitToFirst(100);
+            Query query=mDatabaseReference.orderByChild("Amt").limitToFirst(100);
 
            query.addChildEventListener(new ChildEventListener() {
                @Override
                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                   User user=dataSnapshot.getValue(User.class);
-                   mUser.add(user);
-                   String key=dataSnapshot.getKey();
-                   mKey.add(key);
-                   notifyItemInserted(mUser.size()-1);
-
+                   LeaderBAmt user=dataSnapshot.getValue(LeaderBAmt.class);
+                   mLeaderBoard.add(user);
+                   notifyItemInserted(mLeaderBoard.size()-1);
                }
 
                @Override
                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
                }
-
                @Override
                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
 
@@ -146,6 +149,7 @@ public class LeaderBoard extends Fragment {
 
                }
            });
+
 
         }
 
@@ -163,25 +167,17 @@ public class LeaderBoard extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull LeaderViewHolder leaderViewHolder, int i) {
+        public void onBindViewHolder(@NonNull final LeaderViewHolder leaderViewHolder, int i) {
+            leaderViewHolder.tvBal.setText(Float.toString(mLeaderBoard.get(i).Amt));
+            leaderViewHolder.tvName.setText(mLeaderBoard.get(i).username);
+            new DownLoadImageTask(leaderViewHolder.ivPic).execute(mLeaderBoard.get(i).picid);
 
-            leaderViewHolder.tvName.setText(mUser.get(i).per.username);
-            leaderViewHolder.tvBal.setText(Integer.toString((int)mUser.get(i).wallet.balance));
-            leaderViewHolder.tvLastMatch.setText(Integer.toString((int)mUser.get(i).wallet.lastmatch));
-            if((int)mUser.get(i).wallet.lastmatch>0)
-            {
-                leaderViewHolder.tvLastMatch.setTextColor(getResources().getColor(R.color.green));
-            }
-            else {
-                leaderViewHolder.tvLastMatch.setTextColor(getResources().getColor(R.color.red));
-            }
-            new DownLoadImageTask(leaderViewHolder.ivPic).execute(mUser.get(i).per.picId);
 
         }
 
         @Override
         public int getItemCount() {
-            return mUser.size();
+            return mLeaderBoard.size();
         }
     }
 

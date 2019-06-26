@@ -74,11 +74,7 @@ public class trans_prevmatchList extends AppCompatActivity implements Navigation
             startActivity(new Intent(this, wallet_trans.class));
             finish();
         }
-        if(id==R.id.leader_board)
-        {
-            startActivity(new Intent(this, trans_leader.class));
-            finish();
-        }
+
         if(id==R.id.prevml)
         {
             startActivity(new Intent(this, trans_prevmatchList.class));

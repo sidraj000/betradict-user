@@ -219,18 +219,16 @@ public class prevml extends Fragment {
                     }
                 });
                 final int k = i;
-
-
-
                 cViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        /*
                         Intent intent=new Intent(getContext(), transfrag5.class);
                         Bundle b=null;
                         String data[]={mCMatch.get(k).id,"normal"};
                       intent.putExtra("det",data);
                         startActivity(intent);
-
+*/
                     }
                 });
             }

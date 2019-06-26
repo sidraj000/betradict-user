@@ -4,16 +4,20 @@ package com.vincis.beTraDict;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,9 +81,10 @@ public class frag4 extends Fragment {
    TextView ball1,ball2,ball3,ball4,ball5,ball6,lastball;
     Button refresh;
     String data;
+    ImageView leaderboard;
     private RecyclerView mRecycler,mRecyclerBall;
     private FriendAdapter mAdapter;
-    private ballAdapter mAdapter2;
+   // private ballAdapter mAdapter2;
     private LinearLayoutManager mManager,mManager2;
     private DatabaseReference mFriendsReference;
     FirebaseUser muser;
@@ -108,6 +113,8 @@ public class frag4 extends Fragment {
     JSONArray lastOver;
     Button btnRun;
     int msgindex=0;
+    TextView tvBalance;
+    ImageView dQuest;
 
 
     final String uId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -141,12 +148,79 @@ public class frag4 extends Fragment {
             tvBid=view.findViewById(R.id.tvBid);
             btnRun=view.findViewById(R.id.btnRun);
             tvMsgs=view.findViewById(R.id.tvmsgs);
+            leaderboard=view.findViewById(R.id.one);
+            dQuest=view.findViewById(R.id.two);
+            dQuest.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FirebaseDatabase.getInstance().getReference().child("quest").child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                            final AllQuest allQuest=dataSnapshot.getValue(AllQuest.class);
+                            final String key=dataSnapshot.getKey();
+                            final DatabaseReference ref=FirebaseDatabase.getInstance().getReference().child("quest_usr").child(muser.getUid()).child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]);
+                            ref.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if(!dataSnapshot.exists())
+                                    {
+                                        List<Answer> pairlist=new ArrayList<>();
+                                        pairlist.add(new Answer("U",0, (float) 0));
+                                        ref.child(allQuest.qid).setValue(new Quest(allQuest.ques,allQuest.heading,allQuest.type,allQuest.opt1,allQuest.opt2,allQuest.opt3,allQuest.qid,0,0,0,"U",allQuest.quest_wall.ans,pairlist, (float) 0));
+
+                                    }
+
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+                    Intent intent=new Intent(getContext(),MainActivity.class);
+                    String arrr[] = {arr[0],arr[1],arr[2],arr[3],"c","Dynamic"};
+                    intent.putExtra("details",arrr);
+                    startActivity(intent);
+                }
+            });
         iv1=view.findViewById(R.id.ivTeama);
         iv2=view.findViewById(R.id.ivTeamb);
         lastball=view.findViewById(R.id.lastball);
-        mRecyclerBall=view.findViewById(R.id.mRecyclerBall);
-        final DatabaseReference database=FirebaseDatabase.getInstance().getReference().child("authid").child(muser.getUid());
-        database.addListenerForSingleValueEvent(new ValueEventListener() {
+        tvBalance=view.findViewById(R.id.walletbal);
+        leaderboard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getContext(),trans_leader.class);
+                intent.putExtra("details",arr);
+                startActivity(intent);
+            }
+        });
+     //   mRecyclerBall=view.findViewById(R.id.mRecyclerBall);
+         final DatabaseReference database=FirebaseDatabase.getInstance().getReference();
+        database.child("authid").child(muser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists())
@@ -165,6 +239,20 @@ public class frag4 extends Fragment {
 
             }
         });
+        database.child("LeaderBoard").child(arr[1]).child(arr[2]+arr[3]).child(uId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                LeaderBAmt leaderBAmt=dataSnapshot.getValue(LeaderBAmt.class);
+                float amt= leaderBAmt.Amt;
+                int a=(int) amt;
+                tvBalance.setText(Integer.toString(a));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         btnRef=view.findViewById(R.id.btnRefScore);
 
 
@@ -172,26 +260,26 @@ public class frag4 extends Fragment {
 
 
         mFriendsReference = FirebaseDatabase.getInstance().getReference()
-                .child("quest_usr").child(muser.getUid()).child(arr[0]).child(arr[1]).child(arr[2]);
+                .child("quest_usr").child(muser.getUid()).child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]);
         mManager = new GridLayoutManager(getContext(),2);
        mManager.setReverseLayout(true);
        mManager2=new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,true);
         mRecycler.setLayoutManager(mManager);
-        mRecyclerBall.setLayoutManager(mManager2);
+//        mRecyclerBall.setLayoutManager(mManager2);
         ivAnime=view.findViewById(R.id.ivanime);
          animation=AnimationUtils.loadAnimation(getContext(),R.anim.rotate);
          animation2=AnimationUtils.loadAnimation(getContext(),R.anim.blink_anim);
-        progressBar=view.findViewById(R.id.progressBar2);
-        progressBar.setVisibility(View.GONE);
-        tvscore1=view.findViewById(R.id.score1);
-        new AuthenticateTask().execute();
-        new RetrieveFeedTask().execute();
-        btnRef.setOnClickListener(new View.OnClickListener() {
+  //      progressBar=view.findViewById(R.id.progressBar2);
+//        progressBar.setVisibility(View.GONE);
+      //  tvscore1=view.findViewById(R.id.score1);
+     //   new AuthenticateTask().execute();
+       // new RetrieveFeedTask().execute();
+    /*    btnRef.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AuthenticateTask().execute();
+                //new AuthenticateTask().execute();
             }
-        });
+        });*/
         return view;
 
     }
@@ -212,333 +300,7 @@ public class frag4 extends Fragment {
         super.onStop();
     }
 
-    public class AuthenticateTask extends AsyncTask<Void, Void, String>
-    {
 
-        @Override
-        protected String doInBackground(Void... voids) {
-            try {
-
-                URL url3 = new URL("https://rest.cricketapi.com/rest/v2/auth/?access_key=35faa5e182c8262090cdae7cf7be6f8b&secret_key=a7d00314119875e8a8d22d45cd7818ef&app_id=com.vincis.betradict.admin&device_id="+muser.getUid());
-                HttpURLConnection urlConnection3 = (HttpURLConnection) url3.openConnection();
-
-                try {
-                    BufferedReader bufferedReader3 = new BufferedReader(new InputStreamReader(urlConnection3.getInputStream()));
-                    StringBuilder stringBuilder3 = new StringBuilder();
-                    String line;
-                    while ((line = bufferedReader3.readLine()) != null) {
-                        stringBuilder3.append(line).append("\n");
-                    }
-                    bufferedReader3.close();
-                    String pass3=stringBuilder3.toString();
-
-                    return pass3;
-                }
-                finally{
-                    urlConnection3.disconnect();
-                }
-            }
-            catch(Exception e) {
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-
-               try {
-                   accesstoken=new JSONObject(s).getJSONObject("auth").getString("access_token");
-                   atoken token=new atoken(accesstoken);
-                   FirebaseDatabase.getInstance().getReference().child("authid").child(muser.getUid()).setValue(token);
-               } catch (JSONException e) {
-                   e.printStackTrace();
-               }
-
-        }
-    }
-
-
-
-    public class RetrieveFeedTask extends AsyncTask<Void, Void, String> {
-
-        private Exception exception;
-        protected void onPreExecute() {
-            progressBar.setVisibility(View.VISIBLE);
-        }
-
-        protected String doInBackground(Void... urls) {
-
-
-
-            try {
-
-                URL url = new URL("https://rest.cricketapi.com/rest/v2/match/"+arr[1]+"/?access_token="+accesstoken);
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-
-                try {
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                    StringBuilder stringBuilder = new StringBuilder();
-                    String line;
-                    while ((line = bufferedReader.readLine()) != null) {
-                        stringBuilder.append(line).append("\n");
-                    }
-                    bufferedReader.close();
-                   String pass=stringBuilder.toString();
-
-
-                       return pass;
-
-                }
-                finally{
-                    urlConnection.disconnect();
-                }
-            }
-            catch(Exception e) {
-                return null;
-            }
-        }
-
-        protected void onPostExecute(String response) {
-            if(response == null) {
-                response = "THERE WAS AN ERROR";
-            }
-            progressBar.setVisibility(View.GONE);
-
-            if (response != null) {
-                data=response;
-                try {
-                    JSONObject jsonObj = new JSONObject(response);
-                    JSONObject jsonObj2=jsonObj.getJSONObject("data");
-                    JSONObject jsonObject3=jsonObj2.getJSONObject("card");
-
-                    String status=jsonObject3.getString("status");
-
-                    if(status.equals("notstarted"))
-                    {
-                        tvscore1.setText("Starts soon");
-                        String team1 = jsonObject3.getJSONObject("teams").getJSONObject("a").getString("short_name");
-                        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-                        String team2 = jsonObject3.getJSONObject("teams").getJSONObject("b").getString("short_name");
-                        final File file = new File(getContext().getFilesDir(),team1+".png");
-                        if(file.exists())
-                        {
-                            iv1.setImageBitmap(BitmapFactory.decodeFile(file.getPath()));
-
-                        }
-                        else {
-
-                            storageRef.child("cricketTeamLogo/" + team1+ ".png").getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                                @Override
-                                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                                    iv1.setImageBitmap(BitmapFactory.decodeFile(file.getPath()));
-
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception exception) {
-                                }
-                            });
-
-
-                        }
-                        final File file2 = new File(getContext().getFilesDir(),team2+".png");
-                        if(file2.exists())
-                        {
-                            iv2.setImageBitmap(BitmapFactory.decodeFile(file2.getPath()));
-
-
-                        }
-                        else {
-
-                            storageRef.child("cricketTeamLogo/" + team2+ ".png").getFile(file2).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                                @Override
-                                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                                    iv2.setImageBitmap(BitmapFactory.decodeFile(file2.getPath()));
-
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception exception) {
-
-                                }
-                            });
-
-
-                        }
-                    }
-                    else {
-                        JSONObject tossobject = jsonObject3.getJSONObject("toss");
-                        if (tossobject.has("str")) {
-                            String tossDetails = tossobject.getString("str");
-                        }
-
-                        JSONArray playing11a = jsonObject3.getJSONObject("teams").getJSONObject("a").getJSONObject("match").getJSONArray("playing_xi");
-                        JSONArray playing11b = jsonObject3.getJSONObject("teams").getJSONObject("b").getJSONObject("match").getJSONArray("playing_xi");
-                        JSONArray batorder = jsonObject3.getJSONArray("batting_order");
-
-                        final String batsecond;
-
-                        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-                        final String batfirst = batorder.getJSONArray(0).getString(0);
-                        String score = jsonObject3.getJSONObject("innings").getJSONObject(batfirst + "_1").getString("run_str");
-                        String team1 = jsonObject3.getJSONObject("teams").getJSONObject(batfirst).getString("short_name");
-
-                        if(batfirst.equals("a"))
-                        {
-                            batsecond="b";
-                        }
-                        else {
-                            batsecond="a";
-                        }
-                        String team2 = jsonObject3.getJSONObject("teams").getJSONObject(batsecond).getString("short_name");
-                        final File file = new File(getContext().getFilesDir(),team1+".png");
-                        if(file.exists())
-                        {
-                            iv1.setImageBitmap(BitmapFactory.decodeFile(file.getPath()));
-
-                        }
-                        else {
-
-                            storageRef.child("cricketTeamLogo/" + team1+ ".png").getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                                @Override
-                                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                                    iv1.setImageBitmap(BitmapFactory.decodeFile(file.getPath()));
-
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception exception) {
-                                }
-                            });
-
-
-                        }
-                        final File file2 = new File(getContext().getFilesDir(),team2+".png");
-                        if(file2.exists())
-                        {
-                            iv2.setImageBitmap(BitmapFactory.decodeFile(file2.getPath()));
-
-
-                        }
-                        else {
-
-                            storageRef.child("cricketTeamLogo/" + team2+ ".png").getFile(file2).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                                @Override
-                                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                                    iv2.setImageBitmap(BitmapFactory.decodeFile(file2.getPath()));
-
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception exception) {
-
-                                }
-                            });
-
-
-                        }
-                        iv1.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent=new Intent(getContext(), trans_teama_data.class);
-                                String arr[]={data,batfirst};
-                                intent.putExtra("details",arr);
-                                startActivity(intent);
-                            }
-                        });
-                        iv2.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent=new Intent(getContext(), trans_teama_data.class);
-                                String arr[]={data,batsecond};
-                                intent.putExtra("details",arr);
-                                startActivity(intent);
-                            }
-                        });
-                        tvscore1.setText(team1+ ": " + score);
-                        if (batorder.length() == 2)
-                        {
-                            String score2 = jsonObject3.getJSONObject("innings").getJSONObject(batsecond + "_1").getString("run_str");
-                            tvscore1.setText(team2 + ":" + score2);
-                        } else {
-
-                        }
-
-
-
-
-                        lastOver=jsonObject3.getJSONObject("now").getJSONArray("recent_overs_str").getJSONArray(0).getJSONArray(1);;
-                        final int t=playing11a.length();
-                        mAdapter2=new ballAdapter(getContext());
-                        mRecyclerBall.setAdapter(mAdapter2);
-                        lastball.setText(Html.fromHtml(jsonObject3.getJSONObject("now").getJSONObject("last_ball").getString("comment")));
-                        lastball.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent=new Intent(getContext(),trans_commentry.class);
-                                String arr[]={data,"0"};
-                                intent.putExtra("details",arr);
-                                startActivity(intent);
-                            }
-                        });
-                        tvscore1.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent=new Intent(getContext(),trans_scoreCard.class);
-                                String arr[]={data,"0"};
-                                intent.putExtra("details",arr);
-                                startActivity(intent);
-                            }
-                        });
-
-                    }
-                } catch (JSONException e) {
-                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            } else {}
-        }
-    }
-    private class ballViewHolder extends RecyclerView.ViewHolder {
-        TextView tvBall;
-        public ballViewHolder(@NonNull View itemView) {
-            super(itemView);
-            tvBall=itemView.findViewById(R.id.tvBalls);
-        }
-    }
-    private class ballAdapter extends RecyclerView.Adapter<ballViewHolder>
-    {
-        private Context mContext;
-        public ballAdapter(final Context context) {
-            mContext=context;
-        }
-
-        @NonNull
-        @Override
-        public ballViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-            View view = null;
-
-            LayoutInflater inflater = LayoutInflater.from(mContext);
-            view = inflater.inflate(R.layout.balls, viewGroup, false);
-
-            return new ballViewHolder(view);
-
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull ballViewHolder ballViewHolder, int i) {
-            try {
-                ballViewHolder.tvBall.setText(lastOver.getString(i));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public int getItemCount() {
-
-            return lastOver.length();
-        }
-    }
 
     private static class FriendViewHolder extends RecyclerView.ViewHolder {
 
@@ -572,6 +334,7 @@ public class frag4 extends Fragment {
 
 
                         Quest quest = dataSnapshot.getValue(Quest.class);
+                        if(quest.type.equals(arr[5])) {
 
 
                             // [START_EXCLUDE]
@@ -579,6 +342,7 @@ public class frag4 extends Fragment {
                             mQuestIds.add(dataSnapshot.getKey());
                             mQuest.add(quest);
                             notifyItemInserted(mQuest.size() - 1);
+                        }
 
 
                 }
@@ -590,8 +354,9 @@ public class frag4 extends Fragment {
                     // A comment has changed, use the key to determine if we are displaying this
                     // comment and if so displayed the changed comment.
                     Quest quest = dataSnapshot.getValue(Quest.class);
-                    String userKey = dataSnapshot.getKey();
-                    int userIndex = mQuestIds.indexOf(userKey);
+                    if(quest.type.equals(arr[5])) {
+                        String userKey = dataSnapshot.getKey();
+                        int userIndex = mQuestIds.indexOf(userKey);
 
 
                         // [START_EXCLUDE]
@@ -605,6 +370,7 @@ public class frag4 extends Fragment {
                         } else {
 
                         }
+                    }
 
                 }
 
@@ -616,6 +382,7 @@ public class frag4 extends Fragment {
                     // comment and if so remove it.
                     String userKey = dataSnapshot.getKey();
                     Quest quest = dataSnapshot.getValue(Quest.class);
+                    if(quest.type.equals(arr[5])) {
 
                         int userIndex = mQuestIds.indexOf(userKey);
                         if (userIndex > -1) {
@@ -626,6 +393,7 @@ public class frag4 extends Fragment {
                             // Update the RecyclerView
                             notifyItemRemoved(userIndex);
 
+                        }
                     }
                 }
 
@@ -670,7 +438,6 @@ public class frag4 extends Fragment {
         @Override
         public FriendViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
             View view = null;
-
             LayoutInflater inflater = LayoutInflater.from(mContext);
             view = inflater.inflate(R.layout.question, viewGroup, false);
 
@@ -680,20 +447,14 @@ public class frag4 extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull final FriendViewHolder friendViewHolder, int i) {
 
-            if(i==0)
-            {
-                new AuthenticateTask().execute();
-                new RetrieveFeedTask().execute();
-            }
-
                 ivAnime.clearAnimation();
                 ivAnime.setVisibility(View.GONE);
             ll.setVisibility(View.GONE);
             final Quest quest = mQuest.get(i);
-            final DatabaseReference mdb = FirebaseDatabase.getInstance().getReference().child("quest").child(arr[0]).child(arr[1]).child(arr[2]).child(quest.qid).child("quest_wall");
+            final DatabaseReference mdb = FirebaseDatabase.getInstance().getReference().child("quest").child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(quest.qid).child("quest_wall");
 
 
-            mdb.addValueEventListener(new ValueEventListener() {
+            mdb.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     Quest_wall q = dataSnapshot.getValue(Quest_wall.class);
@@ -755,7 +516,7 @@ public class frag4 extends Fragment {
                     public void onClick(View v) {
                         if(count==0)
                         {
-                            if (quest.myans.equals("U") && quest.cans.equals("U")) {
+                            if (quest.cans.equals("U")) {
 
                                 etAmt.setVisibility(View.VISIBLE);
 
@@ -859,7 +620,6 @@ public class frag4 extends Fragment {
                                                 rate3 = 10;
                                             }
                                         }
-
                                         tvRate1.setText("X" + Float.toString(rate1));
                                         tvRate2.setText("X" + Float.toString(rate2));
                                         tvRate3.setText("X" + Float.toString(rate3));
@@ -918,14 +678,23 @@ public class frag4 extends Fragment {
 
                                     tvMsgs.setVisibility(View.GONE);
                                    DatabaseReference m = FirebaseDatabase.getInstance().getReference();
-                                   m.child("quest_opt").child(arr[0]).child(arr[1]).child(arr[2]).child(quest.qid).child(quest.myans).child(uId).child("cashoutstatus").setValue(1);
+                                   m.child("quest_opt").child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(quest.qid).child(quest.myans).child(uId).child("cashoutstatus").setValue(1);
                                     cashout(quest.mybid, quest.qid, rate);
                                     msgindex=0;
                                     count=0;
-                                    m.child("quest_usr").child(muser.getUid()).child(arr[0]).child(arr[1]).child(arr[2]).child(quest.qid).child("myans").setValue("U");
+                                    m.child("quest_usr").child(muser.getUid()).child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(quest.qid).child("myans").setValue("U");
 
                                 }
 
+                            }
+                        });
+                        tvBid.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent=new Intent(getContext(),bidsDetails.class);
+                                String arrdet[]={arr[0],arr[1],arr[2],arr[3],quest.qid, Float.toString(Math.min(rate1,Math.min(rate2,rate3)))};
+                                intent.putExtra("details",arrdet);
+                                startActivity(intent);
                             }
                         });
                         btn1.setOnClickListener(new View.OnClickListener() {
@@ -936,9 +705,7 @@ public class frag4 extends Fragment {
                                 DatabaseReference mDatabase;
 
                                 mDatabase = FirebaseDatabase.getInstance().getReference();
-                                if (quest.status == 1) {
-                                    Toast.makeText(mContext, "Already answered", Toast.LENGTH_SHORT).show();
-                                } else if (etAmt.getText().toString().isEmpty()) {
+                                 if (etAmt.getText().toString().isEmpty()) {
                                     Toast.makeText(mContext, "Enter Amount", Toast.LENGTH_SHORT).show();
                                 } else if (wallet.balance < parseInt(etAmt.getText().toString())) {
                                     Toast.makeText(mContext, "Insufficient Amount in Wallet", Toast.LENGTH_SHORT).show();
@@ -948,7 +715,12 @@ public class frag4 extends Fragment {
                                 } else {
                                     ivAnime.startAnimation(animation);
                                     ivAnime.setVisibility(View.VISIBLE);
-                                    updatequest(Integer.parseInt(etAmt.getText().toString()), "A", quest.qid, mDatabase.child("quest").child(arr[0]).child(arr[1]).child(arr[2]).child(quest.qid));
+                                    List<Answer> answers=quest.answers;
+                                    answers.add(new Answer("A",parseInt(etAmt.getText().toString()),rate1));
+                                    Quest qust = new Quest(quest.ques,quest.heading,quest.type,quest.opt1, quest.opt2, quest.opt3, quest.qid, 1,parseInt(etAmt.getText().toString()), rate1, "A", quest.cans,answers,(float)0);
+                                    DatabaseReference mData=FirebaseDatabase.getInstance().getReference();
+                                    mData.child("quest_usr").child(uId).child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(quest.qid).setValue(qust);
+                                    updatequest(Integer.parseInt(etAmt.getText().toString()), "A", quest.qid, mDatabase.child("quest").child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(quest.qid));
                                     fl.setAlpha(1);
                                     ll.setVisibility(View.GONE);
                                     count=0;
@@ -965,9 +737,7 @@ public class frag4 extends Fragment {
                                 DatabaseReference mDatabase;
 
                                 mDatabase = FirebaseDatabase.getInstance().getReference();
-                                if (quest.status == 1) {
-                                    Toast.makeText(mContext, "Already answered", Toast.LENGTH_SHORT).show();
-                                } else if (etAmt.getText().toString().isEmpty()) {
+                                if (etAmt.getText().toString().isEmpty()) {
                                     Toast.makeText(mContext, "Enter Amount", Toast.LENGTH_SHORT).show();
                                 } else if (wallet.balance < parseInt(etAmt.getText().toString())) {
                                     Toast.makeText(mContext, "Insufficient Amount in Wallet", Toast.LENGTH_SHORT).show();
@@ -977,7 +747,13 @@ public class frag4 extends Fragment {
                                 } else {
                                     ivAnime.startAnimation(animation);
                                     ivAnime.setVisibility(View.VISIBLE);
-                                    updatequest(parseInt(etAmt.getText().toString()), "B", quest.qid, mDatabase.child("quest").child(arr[0]).child(arr[1]).child(arr[2]).child(quest.qid));
+                                    List<Answer> answers=quest.answers;
+                                    answers.add(new Answer("B",parseInt(etAmt.getText().toString()),rate2));
+                                    Quest qust = new Quest(quest.ques,quest.heading,quest.type,quest.opt1, quest.opt2, quest.opt3, quest.qid, 1,parseInt(etAmt.getText().toString()), rate2, "B", quest.cans,answers,(float)0);
+                                    DatabaseReference mData=FirebaseDatabase.getInstance().getReference();
+                                    mData.child("quest_usr").child(uId).child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(quest.qid).setValue(qust);
+
+                                    updatequest(parseInt(etAmt.getText().toString()), "B", quest.qid, mDatabase.child("quest").child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(quest.qid));
                                     fl.setAlpha(1);
                                     ll.setVisibility(View.GONE);
                                     count=0;
@@ -994,9 +770,7 @@ public class frag4 extends Fragment {
                                 DatabaseReference mDatabase;
 
                                 mDatabase = FirebaseDatabase.getInstance().getReference();
-                                if (quest.status == 1) {
-                                    Toast.makeText(mContext, "Already answered", Toast.LENGTH_SHORT).show();
-                                } else if (etAmt.getText().toString().isEmpty()) {
+                                if (etAmt.getText().toString().isEmpty()) {
                                     Toast.makeText(mContext, "Enter Amount", Toast.LENGTH_SHORT).show();
                                 } else if (wallet.balance < parseInt(etAmt.getText().toString())) {
                                     Toast.makeText(mContext, "Insufficient Amount in Wallet", Toast.LENGTH_SHORT).show();
@@ -1006,7 +780,13 @@ public class frag4 extends Fragment {
                                 } else {
                                     ivAnime.startAnimation(animation);
                                     ivAnime.setVisibility(View.VISIBLE);
-                                    updatequest(parseInt(etAmt.getText().toString()), "C", quest.qid, mDatabase.child("quest").child(arr[0]).child(arr[1]).child(arr[2]).child(quest.qid));
+                                    List<Answer> answers=quest.answers;
+                                    answers.add(new Answer("C",parseInt(etAmt.getText().toString()),rate3));
+                                    Quest qust = new Quest(quest.ques,quest.heading,quest.type,quest.opt1, quest.opt2, quest.opt3, quest.qid, 1,parseInt(etAmt.getText().toString()), rate3, "C", quest.cans,answers,(float)0);
+                                    DatabaseReference mData=FirebaseDatabase.getInstance().getReference();
+                                    mData.child("quest_usr").child(uId).child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(quest.qid).setValue(qust);
+
+                                    updatequest(parseInt(etAmt.getText().toString()), "C", quest.qid, mDatabase.child("quest").child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(quest.qid));
                                     fl.setAlpha(1);
                                     ll.setVisibility(View.GONE);
                                     count=0;
@@ -1080,21 +860,23 @@ public class frag4 extends Fragment {
                         return (Transaction.success(mutableData));
                     }
                     else {
-                        if(opt.equals("A"))
+                         if(opt.equals("A"))
                         {
                             rr=rate1;
+                            DatabaseReference mRef=FirebaseDatabase.getInstance().getReference();
+                            String key= mRef.child("Trollars").child(muser.getUid()).child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(qid).push().getKey();
+                            mRef.child("Trollars").child(muser.getUid()).child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(key).setValue(new Trollars(qid,bid*-1,rr,opt));
                             allQuest.quest_wall.bids1=allQuest.quest_wall.bids1+bid;
                             allQuest.quest_wall.ctbids1= (float) (bid*0.9);
                             allQuest.quest_wall.cbids1=bid;
                             allQuest.quest_wall.ctbids3= (float) (allQuest.quest_wall.ctbids3+bid*0.9);
                             allQuest.quest_wall.ctbids2= (float) (allQuest.quest_wall.ctbids2+bid*0.9);
-                            Quest qust = new Quest(allQuest.ques,allQuest.heading, allQuest.opt1, allQuest.opt2, allQuest.opt3, allQuest.qid, 1, bid,rr, "A", allQuest.quest_wall.ans,(float)0);
                             DatabaseReference mDatabase=FirebaseDatabase.getInstance().getReference();
-                            mDatabase.child("quest_usr").child(uId).child(arr[0]).child(arr[1]).child(arr[2]).child(allQuest.qid).setValue(qust);
+                           // mDatabase.child("quest_usr").child(uId).child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(allQuest.qid).setValue(qust);
 
                             updatewallet(bid,allQuest.qid);
                             Usrwal usr = new Usrwal(uId,bid,rr,0);
-                            mDatabase.child("quest_opt").child(arr[0]).child(arr[1]).child(arr[2]).child(allQuest.qid).child("A").child(uId).setValue(usr);
+                             mDatabase.child("quest_opt").child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(allQuest.qid).child("A").child(key).setValue(usr);
 
                             mutableData.setValue(allQuest);
                             return (Transaction.success(mutableData));
@@ -1103,19 +885,19 @@ public class frag4 extends Fragment {
                         {
 
                             rr=rate2;
+                            DatabaseReference mRef=FirebaseDatabase.getInstance().getReference();
+                            String key= mRef.child("Trollars").child(muser.getUid()).child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(qid).push().getKey();
+                            mRef.child("Trollars").child(muser.getUid()).child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(key).setValue(new Trollars(qid,bid*-1,rr,opt));
 
                             allQuest.quest_wall.bids2=allQuest.quest_wall.bids2+bid;
                             allQuest.quest_wall.ctbids2= (float) (bid*0.9);
                             allQuest.quest_wall.cbids2=bid;
                             allQuest.quest_wall.ctbids3= (float) (allQuest.quest_wall.ctbids3+bid*0.9);
                             allQuest.quest_wall.ctbids1= (float) (allQuest.quest_wall.ctbids1+bid*0.9);
-                            Quest qust = new Quest(allQuest.ques,allQuest.heading, allQuest.opt1, allQuest.opt2, allQuest.opt3, allQuest.qid, 1, bid,rr, "B", allQuest.quest_wall.ans,(float)0);
                             DatabaseReference mDatabase=FirebaseDatabase.getInstance().getReference();
-                            mDatabase.child("quest_usr").child(uId).child(arr[0]).child(arr[1]).child(arr[2]).child(allQuest.qid).setValue(qust);
-
                             updatewallet(bid,allQuest.qid);
                             Usrwal usr = new Usrwal(uId,bid,rr,0);
-                            mDatabase.child("quest_opt").child(arr[0]).child(arr[1]).child(arr[2]).child(allQuest.qid).child("B").child(uId).setValue(usr);
+                            mDatabase.child("quest_opt").child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(allQuest.qid).child("B").child(key).setValue(usr);
 
                             mutableData.setValue(allQuest);
                             return (Transaction.success(mutableData));
@@ -1124,21 +906,21 @@ public class frag4 extends Fragment {
                         {
 
                             rr=rate3;
-
+                            DatabaseReference mRef=FirebaseDatabase.getInstance().getReference();
+                            String key= mRef.child("Trollars").child(muser.getUid()).child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(qid).push().getKey();
+                            mRef.child("Trollars").child(muser.getUid()).child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(key).setValue(new Trollars(qid,bid*-1,rr,opt));
                             allQuest.quest_wall.bids3=allQuest.quest_wall.bids3+bid;
                             allQuest.quest_wall.ctbids3= (float) (bid*0.9);
                             allQuest.quest_wall.cbids3=bid;
-                            Quest qust = new Quest(allQuest.ques,allQuest.heading, allQuest.opt1, allQuest.opt2, allQuest.opt3, allQuest.qid, 1, bid,rr, "C", allQuest.quest_wall.ans,(float)0);
                             DatabaseReference mDatabase=FirebaseDatabase.getInstance().getReference();
-                            mDatabase.child("quest_usr").child(uId).child(arr[0]).child(arr[1]).child(arr[2]).child(allQuest.qid).setValue(qust);
-
                             updatewallet(bid,allQuest.qid);
                             Usrwal usr = new Usrwal(uId,bid,rr,0);
-                            mDatabase.child("quest_opt").child(arr[0]).child(arr[1]).child(arr[2]).child(allQuest.qid).child("C").child(uId).setValue(usr);
+                            mDatabase.child("quest_opt").child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(allQuest.qid).child("C").child(key).setValue(usr);
 
                             mutableData.setValue(allQuest);
                             return (Transaction.success(mutableData));
                         }
+
 
                     }
                 }
@@ -1157,26 +939,22 @@ public class frag4 extends Fragment {
 
         public void updatewallet(final float mybid,final String qid)
         {
-            DatabaseReference mRef=FirebaseDatabase.getInstance().getReference().child("users").child(uId);
+            DatabaseReference mRef=FirebaseDatabase.getInstance().getReference().child("LeaderBoard").child(arr[1]).child(arr[2]+arr[3]).child(uId);
             mRef.runTransaction(new Transaction.Handler() {
                 @NonNull
                 @Override
                 public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
-                    User user=mutableData.getValue(User.class);
+                    LeaderBAmt amt=mutableData.getValue(LeaderBAmt.class);
 
-                if(user==null)
+                if(amt==null)
                 {
 
                     Toast.makeText(mContext, "error", Toast.LENGTH_SHORT).show();
                     return (Transaction.success(mutableData));
                 }
                 else {
-                    user.wallet.balance=user.wallet.balance-mybid;
-                    Calendar cal = Calendar.getInstance();
-                    Date currentDate = cal.getTime();
-
-                    user.wallet.lastTransactions.add(new transactions(mybid*-1,qid,arr[1],currentDate,arr[2]));
-                    mutableData.setValue(user);
+                    amt.Amt=amt.Amt-mybid;
+                    mutableData.setValue(amt);
                     return (Transaction.success(mutableData));
                 }
 

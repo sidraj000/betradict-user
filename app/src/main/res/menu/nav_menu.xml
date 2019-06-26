@@ -8,12 +8,6 @@
         >
      </item>
     <item
-        android:id="@+id/leader_board"
-        android:title="Leader Board"
-        android:fontFamily="@font/aldrich"
-        android:icon="@mipmap/leaderboard">
-    </item>
-    <item
         android:id="@+id/wallet"
         android:title="Wallet"
         android:fontFamily="@font/aldrich"

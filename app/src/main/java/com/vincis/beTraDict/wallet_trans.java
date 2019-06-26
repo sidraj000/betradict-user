@@ -92,11 +92,7 @@ public class wallet_trans extends AppCompatActivity implements NavigationView.On
             startActivity(new Intent(this,wallet_trans.class));
             finish();
         }
-        if(id==R.id.leader_board)
-        {
-            startActivity(new Intent(this, trans_leader.class));
-            finish();
-        }
+
         if(id==R.id.support)
         {
             startActivity(new Intent(this, transSupport.class));

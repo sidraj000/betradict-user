@@ -307,18 +307,18 @@ public class login_act extends AppCompatActivity {
         if(user!=null&&a==0)
      {
          writeNewUser(user.getUid(),user.getDisplayName(),user.getEmail(),user.getPhotoUrl().toString());
-         for(int i=0;i<cric.size();i++)
+         /*  for(int i=0;i<cric.size();i++)
          {
              final int k=i;
              final List<AllQuest>mQ=new ArrayList<>();
-             DatabaseReference mDataB=FirebaseDatabase.getInstance().getReference().child("quest").child("cricket").child(cric.get(i)).child("normal");
+           DatabaseReference mDataB=FirebaseDatabase.getInstance().getReference().child("quest").child("cricket").child(cric.get(i)).child("normal");
              mDataB.addChildEventListener(new ChildEventListener() {
                  @Override
                  public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                      AllQuest quest=dataSnapshot.getValue(AllQuest.class);
                      mQ.add(quest);
                      DatabaseReference mDa=FirebaseDatabase.getInstance().getReference();
-                     mDa.child("quest_usr").child(user.getUid()).child("cricket").child(cric.get(k)).child("normal").child(quest.qid).setValue(new Quest(quest.ques,quest.heading,quest.opt1,quest.opt2,quest.opt3,quest.qid,0,0,0,"U","U",(float)0));
+                     mDa.child("quest_usr").child(user.getUid()).child("cricket").child(cric.get(k)).child("normal").child(quest.qid).setValue(new Quest(quest.ques,quest.heading,quest.type,quest.opt1,quest.opt2,quest.opt3,quest.qid,0,0,0,"U","U",(float)0));
                  }
 
                  @Override
@@ -341,7 +341,7 @@ public class login_act extends AppCompatActivity {
 
                  }
              });
-         }
+         }*/
 
 
          startActivity(new Intent(login_act.this, trans_activity.class));

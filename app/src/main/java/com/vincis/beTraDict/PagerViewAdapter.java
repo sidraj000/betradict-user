@@ -25,21 +25,12 @@ class PagerViewAdapter extends FragmentPagerAdapter{
                    break;
 
 
-                case 1:
-                   fragment=new frag3();
-                   fragment.setArguments(bd);
-                   break;
-            case 2:
-                fragment=new frag2();
-                fragment.setArguments(bd);
-                break;
-
         }
         return fragment;
     }
 
     @Override
     public int getCount() {
-        return 3;
+        return 1;
     }
 }

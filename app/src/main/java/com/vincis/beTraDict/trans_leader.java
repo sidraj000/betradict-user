@@ -26,6 +26,7 @@ public class trans_leader extends AppCompatActivity implements NavigationView.On
     String uid= FirebaseAuth.getInstance().getCurrentUser().getUid();
     private DrawerLayout mDrawer;
     private ActionBarDrawerToggle mToggle;
+    public String arr[];
 TextView tvU;
 
 
@@ -44,16 +45,20 @@ TextView tvU;
         tvU.setText("Welcome! "+FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
         mToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
+        arr=getIntent().getStringArrayExtra("details");
         FragmentManager fm=getSupportFragmentManager();
         LeaderBoard fragment=new LeaderBoard();
+        Bundle b=new Bundle();
+        b.putStringArray("details",arr);
+        fragment.setArguments(b);
         fm.beginTransaction().replace(R.id.trans_l,fragment).commit();
         btn=findViewById(R.id.btnRef);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               startActivity(new Intent(trans_leader.this,trans_leader.class));
+               Intent intent=(new Intent(trans_leader.this,trans_leader.class));
+               intent.putExtra("details",arr);
+               startActivity(intent );
                finish();
             }
         });
@@ -87,11 +92,7 @@ TextView tvU;
             startActivity(new Intent(this,wallet_trans.class));
             finish();
         }
-        if(id==R.id.leader_board)
-        {
-            startActivity(new Intent(this, trans_leader.class));
-            finish();
-        }
+
         if(id==R.id.prevml)
         {
             startActivity(new Intent(this, trans_prevmatchList.class));

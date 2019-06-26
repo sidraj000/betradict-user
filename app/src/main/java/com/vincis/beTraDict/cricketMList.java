@@ -311,7 +311,7 @@ public class cricketMList extends Fragment {
                     @Override
                     public void onClick(View v) {
                             Intent intent = new Intent(mContext, MainActivity.class);
-                            String arr[] = {"cricket", mCMatch.get(k).id,"normal"};
+                            String arr[] = {"cricket", mCMatch.get(k).id,"normal","a"};
                             intent.putExtra("details", arr);
                             startActivity(intent);
 

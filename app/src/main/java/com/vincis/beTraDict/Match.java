@@ -1,6 +1,8 @@
 package com.vincis.beTraDict;
 
 import java.util.Date;
+import java.util.List;
+
 
 public class Match {
     public Date date;
@@ -8,6 +10,7 @@ public class Match {
     public String teamA;
     public String teamB;
     public Integer status;
+
     public Match()
     {
     }
