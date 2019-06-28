@@ -5,9 +5,17 @@
     android:layout_height="match_parent"
     tools:context=".LeaderBoard">
 
-
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="27dp"
+    android:text="Top Betradicters"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginTop="5dp"
+    android:textColor="@color/white"
+    android:textSize="25dp"
+    android:textStyle="bold"/>
     <android.support.v7.widget.RecyclerView
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="37dp"
         android:id="@+id/leaderlist"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -45,8 +45,8 @@ public class wallet_trans extends AppCompatActivity implements NavigationView.On
         tvU=header.findViewById(R.id.tvUName);
         tvU.setText("Welcome! "+FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
         navigationView.setItemIconTintList(null);
-        mToggle.syncState();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //mToggle.syncState();
+        //llgetSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mRef.child("users").child(uid).child("wallet").addValueEventListener(new ValueEventListener() {
             @Override

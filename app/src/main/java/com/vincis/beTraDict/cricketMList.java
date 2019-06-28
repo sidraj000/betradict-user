@@ -1,6 +1,8 @@
 package com.vincis.beTraDict;
 
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -51,8 +53,7 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class cricketMList extends Fragment {
-
-
+    public SharedViewModel viewModel;
     private RecyclerView mRecycler;
     private cListAdapter mAdapter;
     private LinearLayoutManager mManager;
@@ -79,7 +80,7 @@ public class cricketMList extends Fragment {
         mRecycler = view.findViewById(R.id.matchList);
         muser = FirebaseAuth.getInstance().getCurrentUser();
         mFriendsReference = FirebaseDatabase.getInstance().getReference().child("match").child("cricket");
-        mManager = new LinearLayoutManager(getContext());
+        mManager = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
         //mManager.setReverseLayout(true);
         //mManager.setStackFromEnd(true);
         mRecycler.setHasFixedSize(true);
@@ -88,6 +89,12 @@ public class cricketMList extends Fragment {
         animation= AnimationUtils.loadAnimation(getContext(),R.anim.rotate);
 
         return view;
+
+    }
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        viewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
 
     }
 
@@ -108,7 +115,7 @@ public class cricketMList extends Fragment {
 
     private static class cViewHolder extends RecyclerView.ViewHolder {
 
-      ImageView ivTeamA,ivTeamB;
+      ImageView ivTeamA,ivTeamB,greenButton;
       TextView tvTeamA,tvTeamB,tvDate;
      TextView tvCounter;
 
@@ -120,6 +127,8 @@ public class cricketMList extends Fragment {
             tvTeamB=itemView.findViewById(R.id.tvTeam2);
             tvDate=itemView.findViewById(R.id.tvDate);
             tvCounter=itemView.findViewById(R.id.tvCounter);
+            greenButton=itemView.findViewById(R.id.greenButton);
+            greenButton.setVisibility(View.GONE);
         }
     }
 
@@ -215,7 +224,7 @@ public class cricketMList extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull final cViewHolder cViewHolder, int i) {
-
+            
             if(mCMatch.get(i).status==0) {
                 final int k = i;
                 cViewHolder.tvTeamA.setText(mCMatch.get(i).teamA);
@@ -303,17 +312,15 @@ public class cricketMList extends Fragment {
                     }
 
                     public void onFinish() {
-                        cViewHolder.tvCounter.setText("Match Has Started!");
+                        cViewHolder.tvCounter.setVisibility(View.GONE);
+                        cViewHolder.greenButton.setVisibility(View.GONE);
                     }
                 }.start();
 
               cViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                            Intent intent = new Intent(mContext, MainActivity.class);
-                            String arr[] = {"cricket", mCMatch.get(k).id,"normal","a"};
-                            intent.putExtra("details", arr);
-                            startActivity(intent);
+                            viewModel.setText(mCMatch.get(k).id);
 
                     }
                 });

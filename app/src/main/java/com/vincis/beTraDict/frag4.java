@@ -88,7 +88,7 @@ public class frag4 extends Fragment {
     private LinearLayoutManager mManager,mManager2;
     private DatabaseReference mFriendsReference;
     FirebaseUser muser;
-    public Wallet wallet=new Wallet();
+    public LeaderBAmt leaderBAmt;
     public Usrwal u;
     public Quest_wall quest_wall;
     public Bundle b;
@@ -111,10 +111,10 @@ public class frag4 extends Fragment {
     LinearLayout fl;
     int count=0;
     JSONArray lastOver;
-    Button btnRun;
     int msgindex=0;
     TextView tvBalance;
-    ImageView dQuest;
+    ImageView dQuest,guruG;
+    Button btnBid;
 
 
     final String uId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -146,19 +146,20 @@ public class frag4 extends Fragment {
             ll=view.findViewById(R.id.ll);
             fl=view.findViewById(R.id.framefade);
             tvBid=view.findViewById(R.id.tvBid);
-            btnRun=view.findViewById(R.id.btnRun);
+            btnBid=view.findViewById(R.id.btnBid);
             tvMsgs=view.findViewById(R.id.tvmsgs);
             leaderboard=view.findViewById(R.id.one);
             dQuest=view.findViewById(R.id.two);
+            guruG=view.findViewById(R.id.three);
             dQuest.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FirebaseDatabase.getInstance().getReference().child("quest").child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).addChildEventListener(new ChildEventListener() {
+                    FirebaseDatabase.getInstance().getReference().child("quest").child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child("Dynamic").addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                             final AllQuest allQuest=dataSnapshot.getValue(AllQuest.class);
                             final String key=dataSnapshot.getKey();
-                            final DatabaseReference ref=FirebaseDatabase.getInstance().getReference().child("quest_usr").child(muser.getUid()).child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]);
+                            final DatabaseReference ref=FirebaseDatabase.getInstance().getReference().child("quest_usr").child(muser.getUid()).child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child("Dynamic");
                             ref.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -167,7 +168,9 @@ public class frag4 extends Fragment {
                                         List<Answer> pairlist=new ArrayList<>();
                                         pairlist.add(new Answer("U",0, (float) 0));
                                         ref.child(allQuest.qid).setValue(new Quest(allQuest.ques,allQuest.heading,allQuest.type,allQuest.opt1,allQuest.opt2,allQuest.opt3,allQuest.qid,0,0,0,"U",allQuest.quest_wall.ans,pairlist, (float) 0));
-
+                                        fl.setAlpha(1);
+                                        ll.setVisibility(View.GONE);
+                                        count=0;
                                     }
 
                                 }
@@ -206,6 +209,7 @@ public class frag4 extends Fragment {
                     startActivity(intent);
                 }
             });
+
         iv1=view.findViewById(R.id.ivTeama);
         iv2=view.findViewById(R.id.ivTeamb);
         lastball=view.findViewById(R.id.lastball);
@@ -214,11 +218,13 @@ public class frag4 extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(getContext(),trans_leader.class);
+                fl.setAlpha(1);
+                ll.setVisibility(View.GONE);
+                count=0;
                 intent.putExtra("details",arr);
                 startActivity(intent);
             }
         });
-     //   mRecyclerBall=view.findViewById(R.id.mRecyclerBall);
          final DatabaseReference database=FirebaseDatabase.getInstance().getReference();
         database.child("authid").child(muser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -239,7 +245,7 @@ public class frag4 extends Fragment {
 
             }
         });
-        database.child("LeaderBoard").child(arr[1]).child(arr[2]+arr[3]).child(uId).addValueEventListener(new ValueEventListener() {
+        database.child("LeaderBoard").child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(uId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 LeaderBAmt leaderBAmt=dataSnapshot.getValue(LeaderBAmt.class);
@@ -260,11 +266,12 @@ public class frag4 extends Fragment {
 
 
         mFriendsReference = FirebaseDatabase.getInstance().getReference()
-                .child("quest_usr").child(muser.getUid()).child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]);
+                .child("quest_usr").child(muser.getUid()).child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(arr[5]);
         mManager = new GridLayoutManager(getContext(),2);
-       mManager.setReverseLayout(true);
+     //  mManager.setReverseLayout(true);
        mManager2=new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,true);
         mRecycler.setLayoutManager(mManager);
+      //    mRecycler.setHasFixedSize(true);
 //        mRecyclerBall.setLayoutManager(mManager2);
         ivAnime=view.findViewById(R.id.ivanime);
          animation=AnimationUtils.loadAnimation(getContext(),R.anim.rotate);
@@ -334,7 +341,7 @@ public class frag4 extends Fragment {
 
 
                         Quest quest = dataSnapshot.getValue(Quest.class);
-                        if(quest.type.equals(arr[5])) {
+
 
 
                             // [START_EXCLUDE]
@@ -342,7 +349,7 @@ public class frag4 extends Fragment {
                             mQuestIds.add(dataSnapshot.getKey());
                             mQuest.add(quest);
                             notifyItemInserted(mQuest.size() - 1);
-                        }
+
 
 
                 }
@@ -354,7 +361,7 @@ public class frag4 extends Fragment {
                     // A comment has changed, use the key to determine if we are displaying this
                     // comment and if so displayed the changed comment.
                     Quest quest = dataSnapshot.getValue(Quest.class);
-                    if(quest.type.equals(arr[5])) {
+
                         String userKey = dataSnapshot.getKey();
                         int userIndex = mQuestIds.indexOf(userKey);
 
@@ -370,7 +377,7 @@ public class frag4 extends Fragment {
                         } else {
 
                         }
-                    }
+
 
                 }
 
@@ -382,7 +389,6 @@ public class frag4 extends Fragment {
                     // comment and if so remove it.
                     String userKey = dataSnapshot.getKey();
                     Quest quest = dataSnapshot.getValue(Quest.class);
-                    if(quest.type.equals(arr[5])) {
 
                         int userIndex = mQuestIds.indexOf(userKey);
                         if (userIndex > -1) {
@@ -395,7 +401,7 @@ public class frag4 extends Fragment {
 
                         }
                     }
-                }
+
 
                 @Override
                 public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
@@ -415,12 +421,12 @@ public class frag4 extends Fragment {
             query.addChildEventListener(childEventListener);
             mChildEventListener = childEventListener;
 
-      DatabaseReference md1=FirebaseDatabase.getInstance().getReference().child("users").child(uId);
+      DatabaseReference md1=FirebaseDatabase.getInstance().getReference().child("LeaderBoard").child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(uId);
             md1.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    User usr=dataSnapshot.getValue(User.class);
-                        wallet=usr.wallet;
+                    LeaderBAmt usr=dataSnapshot.getValue(LeaderBAmt.class);
+                        leaderBAmt=usr;
                     //Toast.makeText(context, Integer.toString(usr.wallet.balance), Toast.LENGTH_SHORT).show();
 
                 }
@@ -447,12 +453,38 @@ public class frag4 extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull final FriendViewHolder friendViewHolder, int i) {
 
+
                 ivAnime.clearAnimation();
                 ivAnime.setVisibility(View.GONE);
             ll.setVisibility(View.GONE);
             final Quest quest = mQuest.get(i);
-            final DatabaseReference mdb = FirebaseDatabase.getInstance().getReference().child("quest").child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(quest.qid).child("quest_wall");
 
+            guruG.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FirebaseDatabase.getInstance().getReference().child("match").child(arr[0]).child(arr[1]).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                           Match match=dataSnapshot.getValue(Match.class);
+                            fl.setAlpha(1);
+                            ll.setVisibility(View.GONE);
+                            count=0;
+                            Intent intent=new Intent(getContext(),SelectMatch.class);
+                            String arr[]={match.teamA,match.teamB};
+                            intent.putExtra("details",arr);
+                            startActivity(intent);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            });
+
+
+            final DatabaseReference mdb = FirebaseDatabase.getInstance().getReference().child("quest").child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(arr[5]).child(quest.qid).child("quest_wall");
 
             mdb.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -524,13 +556,7 @@ public class frag4 extends Fragment {
                             else {
                                 etAmt.setVisibility(View.GONE);
                             }
-                            if(quest.status==0)
-                            {
-                                btnRun.setVisibility(View.GONE);
-                            }
-                            else {
-                                btnRun.setVisibility(View.VISIBLE);
-                            }
+
                             count=1;
                             ll.setVisibility(View.VISIBLE);
                         float a = (float) 0.5;
@@ -546,7 +572,7 @@ public class frag4 extends Fragment {
                                 tvBid.setVisibility(View.GONE);
                             }
                             else {
-                                tvBid.setText("Your Bid:"+quest.mybid);
+                                tvBid.setText("Last Bid:"+quest.mybid);
                                 tvBid.setVisibility(View.VISIBLE);
                                 if(quest.myans.equals("A"))
                                 {
@@ -630,6 +656,8 @@ public class frag4 extends Fragment {
                                         tvRate2.setVisibility(View.VISIBLE);
                                         tvRate3.setVisibility(View.VISIBLE);
                                         tvquest.setVisibility(View.VISIBLE);
+                                        friendViewHolder.tvMaxRate.setText("x"+Float.toString(Math.max(rate1,Math.max(rate2,rate3))));
+
                                     }
                                 }
 
@@ -648,51 +676,14 @@ public class frag4 extends Fragment {
                                 count=0;
                             }
                         });
-                        btnRun.setOnClickListener(new View.OnClickListener() {
+                        btnBid.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                if(msgindex==0&&(quest.cans.equals("U"))) {
-                                    Float rate;
-                                    if (rate1 <= rate2 && rate1 <= rate3) {
-                                        rate = rate1;
-                                    } else if (rate2 <= rate1 && rate2 <= rate3) {
-                                        rate = rate2;
-                                    } else {
-                                        rate = rate3;
-                                    }
-                                    tvMsgs.setText("You would get:" + Float.toString(rate * quest.mybid/2));
-                                    tvMsgs.setVisibility(View.VISIBLE);
-                                    msgindex = 1;
-                                    btnRun.setText("Confirm");
-                                }
-                                else if(msgindex==1&&(quest.cans.equals("U")))
-                                {
-                                    Float rate;
-                                    if (rate1 <= rate2 && rate1 <= rate3) {
-                                        rate = rate1;
-                                    } else if (rate2 <= rate1 && rate2 <= rate3) {
-                                        rate = rate2;
-                                    } else {
-                                        rate = rate3;
-                                    }
-
-                                    tvMsgs.setVisibility(View.GONE);
-                                   DatabaseReference m = FirebaseDatabase.getInstance().getReference();
-                                   m.child("quest_opt").child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(quest.qid).child(quest.myans).child(uId).child("cashoutstatus").setValue(1);
-                                    cashout(quest.mybid, quest.qid, rate);
-                                    msgindex=0;
-                                    count=0;
-                                    m.child("quest_usr").child(muser.getUid()).child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(quest.qid).child("myans").setValue("U");
-
-                                }
-
-                            }
-                        });
-                        tvBid.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
+                                fl.setAlpha(1);
+                                ll.setVisibility(View.GONE);
+                                count=0;
                                 Intent intent=new Intent(getContext(),bidsDetails.class);
-                                String arrdet[]={arr[0],arr[1],arr[2],arr[3],quest.qid, Float.toString(Math.min(rate1,Math.min(rate2,rate3)))};
+                                String arrdet[]={arr[0],arr[1],arr[2],arr[3],arr[5],quest.qid, Float.toString(Math.min(rate1,Math.min(rate2,rate3)))};
                                 intent.putExtra("details",arrdet);
                                 startActivity(intent);
                             }
@@ -707,7 +698,7 @@ public class frag4 extends Fragment {
                                 mDatabase = FirebaseDatabase.getInstance().getReference();
                                  if (etAmt.getText().toString().isEmpty()) {
                                     Toast.makeText(mContext, "Enter Amount", Toast.LENGTH_SHORT).show();
-                                } else if (wallet.balance < parseInt(etAmt.getText().toString())) {
+                                } else if (leaderBAmt.Amt < parseInt(etAmt.getText().toString())) {
                                     Toast.makeText(mContext, "Insufficient Amount in Wallet", Toast.LENGTH_SHORT).show();
                                 } else if (parseInt(etAmt.getText().toString()) < 2) {
                                     Toast.makeText(mContext, "Minimum bid is 2 trollars", Toast.LENGTH_SHORT).show();
@@ -719,8 +710,8 @@ public class frag4 extends Fragment {
                                     answers.add(new Answer("A",parseInt(etAmt.getText().toString()),rate1));
                                     Quest qust = new Quest(quest.ques,quest.heading,quest.type,quest.opt1, quest.opt2, quest.opt3, quest.qid, 1,parseInt(etAmt.getText().toString()), rate1, "A", quest.cans,answers,(float)0);
                                     DatabaseReference mData=FirebaseDatabase.getInstance().getReference();
-                                    mData.child("quest_usr").child(uId).child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(quest.qid).setValue(qust);
-                                    updatequest(Integer.parseInt(etAmt.getText().toString()), "A", quest.qid, mDatabase.child("quest").child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(quest.qid));
+                                    mData.child("quest_usr").child(uId).child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(arr[5]).child(quest.qid).setValue(qust);
+                                    updatequest(Integer.parseInt(etAmt.getText().toString()), "A", quest.qid, mDatabase.child("quest").child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(arr[5]).child(quest.qid));
                                     fl.setAlpha(1);
                                     ll.setVisibility(View.GONE);
                                     count=0;
@@ -739,10 +730,10 @@ public class frag4 extends Fragment {
                                 mDatabase = FirebaseDatabase.getInstance().getReference();
                                 if (etAmt.getText().toString().isEmpty()) {
                                     Toast.makeText(mContext, "Enter Amount", Toast.LENGTH_SHORT).show();
-                                } else if (wallet.balance < parseInt(etAmt.getText().toString())) {
+                                } else if (leaderBAmt.Amt < parseInt(etAmt.getText().toString())) {
                                     Toast.makeText(mContext, "Insufficient Amount in Wallet", Toast.LENGTH_SHORT).show();
                                 } else if (parseInt(etAmt.getText().toString()) < 2) {
-                                    Toast.makeText(mContext, "Minimum bid is 2 trollars" + wallet.balance, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(mContext, "Minimum bid is 2 trollars" , Toast.LENGTH_SHORT).show();
 
                                 } else {
                                     ivAnime.startAnimation(animation);
@@ -751,9 +742,9 @@ public class frag4 extends Fragment {
                                     answers.add(new Answer("B",parseInt(etAmt.getText().toString()),rate2));
                                     Quest qust = new Quest(quest.ques,quest.heading,quest.type,quest.opt1, quest.opt2, quest.opt3, quest.qid, 1,parseInt(etAmt.getText().toString()), rate2, "B", quest.cans,answers,(float)0);
                                     DatabaseReference mData=FirebaseDatabase.getInstance().getReference();
-                                    mData.child("quest_usr").child(uId).child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(quest.qid).setValue(qust);
+                                    mData.child("quest_usr").child(uId).child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(arr[5]).child(quest.qid).setValue(qust);
 
-                                    updatequest(parseInt(etAmt.getText().toString()), "B", quest.qid, mDatabase.child("quest").child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(quest.qid));
+                                    updatequest(parseInt(etAmt.getText().toString()), "B", quest.qid, mDatabase.child("quest").child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(arr[5]).child(quest.qid));
                                     fl.setAlpha(1);
                                     ll.setVisibility(View.GONE);
                                     count=0;
@@ -772,10 +763,10 @@ public class frag4 extends Fragment {
                                 mDatabase = FirebaseDatabase.getInstance().getReference();
                                 if (etAmt.getText().toString().isEmpty()) {
                                     Toast.makeText(mContext, "Enter Amount", Toast.LENGTH_SHORT).show();
-                                } else if (wallet.balance < parseInt(etAmt.getText().toString())) {
+                                } else if (leaderBAmt.Amt < parseInt(etAmt.getText().toString())) {
                                     Toast.makeText(mContext, "Insufficient Amount in Wallet", Toast.LENGTH_SHORT).show();
                                 } else if (parseInt(etAmt.getText().toString()) < 2) {
-                                    Toast.makeText(mContext, "Minimum bid is 2 trollars" + wallet.balance, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(mContext, "Minimum bid is 2 trollars", Toast.LENGTH_SHORT).show();
 
                                 } else {
                                     ivAnime.startAnimation(animation);
@@ -784,9 +775,9 @@ public class frag4 extends Fragment {
                                     answers.add(new Answer("C",parseInt(etAmt.getText().toString()),rate3));
                                     Quest qust = new Quest(quest.ques,quest.heading,quest.type,quest.opt1, quest.opt2, quest.opt3, quest.qid, 1,parseInt(etAmt.getText().toString()), rate3, "C", quest.cans,answers,(float)0);
                                     DatabaseReference mData=FirebaseDatabase.getInstance().getReference();
-                                    mData.child("quest_usr").child(uId).child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(quest.qid).setValue(qust);
+                                    mData.child("quest_usr").child(uId).child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(arr[5]).child(quest.qid).setValue(qust);
 
-                                    updatequest(parseInt(etAmt.getText().toString()), "C", quest.qid, mDatabase.child("quest").child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(quest.qid));
+                                    updatequest(parseInt(etAmt.getText().toString()), "C", quest.qid, mDatabase.child("quest").child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(arr[5]).child(quest.qid));
                                     fl.setAlpha(1);
                                     ll.setVisibility(View.GONE);
                                     count=0;
@@ -865,7 +856,7 @@ public class frag4 extends Fragment {
                             rr=rate1;
                             DatabaseReference mRef=FirebaseDatabase.getInstance().getReference();
                             String key= mRef.child("Trollars").child(muser.getUid()).child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(qid).push().getKey();
-                            mRef.child("Trollars").child(muser.getUid()).child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(key).setValue(new Trollars(qid,bid*-1,rr,opt));
+                            mRef.child("Trollars").child(muser.getUid()).child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(arr[5]).child(qid).child(key).setValue(new Trollars(qid,bid*-1,rr,opt));
                             allQuest.quest_wall.bids1=allQuest.quest_wall.bids1+bid;
                             allQuest.quest_wall.ctbids1= (float) (bid*0.9);
                             allQuest.quest_wall.cbids1=bid;
@@ -876,7 +867,7 @@ public class frag4 extends Fragment {
 
                             updatewallet(bid,allQuest.qid);
                             Usrwal usr = new Usrwal(uId,bid,rr,0);
-                             mDatabase.child("quest_opt").child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(allQuest.qid).child("A").child(key).setValue(usr);
+                             mDatabase.child("quest_opt").child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(arr[5]).child(allQuest.qid).child("A").child(key).setValue(usr);
 
                             mutableData.setValue(allQuest);
                             return (Transaction.success(mutableData));
@@ -887,8 +878,7 @@ public class frag4 extends Fragment {
                             rr=rate2;
                             DatabaseReference mRef=FirebaseDatabase.getInstance().getReference();
                             String key= mRef.child("Trollars").child(muser.getUid()).child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(qid).push().getKey();
-                            mRef.child("Trollars").child(muser.getUid()).child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(key).setValue(new Trollars(qid,bid*-1,rr,opt));
-
+                            mRef.child("Trollars").child(muser.getUid()).child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(arr[5]).child(qid).child(key).setValue(new Trollars(qid,bid*-1,rr,opt));
                             allQuest.quest_wall.bids2=allQuest.quest_wall.bids2+bid;
                             allQuest.quest_wall.ctbids2= (float) (bid*0.9);
                             allQuest.quest_wall.cbids2=bid;
@@ -897,7 +887,7 @@ public class frag4 extends Fragment {
                             DatabaseReference mDatabase=FirebaseDatabase.getInstance().getReference();
                             updatewallet(bid,allQuest.qid);
                             Usrwal usr = new Usrwal(uId,bid,rr,0);
-                            mDatabase.child("quest_opt").child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(allQuest.qid).child("B").child(key).setValue(usr);
+                            mDatabase.child("quest_opt").child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(arr[5]).child(allQuest.qid).child("B").child(key).setValue(usr);
 
                             mutableData.setValue(allQuest);
                             return (Transaction.success(mutableData));
@@ -907,15 +897,16 @@ public class frag4 extends Fragment {
 
                             rr=rate3;
                             DatabaseReference mRef=FirebaseDatabase.getInstance().getReference();
+
                             String key= mRef.child("Trollars").child(muser.getUid()).child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(qid).push().getKey();
-                            mRef.child("Trollars").child(muser.getUid()).child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(key).setValue(new Trollars(qid,bid*-1,rr,opt));
+                            mRef.child("Trollars").child(muser.getUid()).child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(arr[5]).child(qid).child(key).setValue(new Trollars(qid,bid*-1,rr,opt));
                             allQuest.quest_wall.bids3=allQuest.quest_wall.bids3+bid;
                             allQuest.quest_wall.ctbids3= (float) (bid*0.9);
                             allQuest.quest_wall.cbids3=bid;
                             DatabaseReference mDatabase=FirebaseDatabase.getInstance().getReference();
                             updatewallet(bid,allQuest.qid);
                             Usrwal usr = new Usrwal(uId,bid,rr,0);
-                            mDatabase.child("quest_opt").child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(allQuest.qid).child("C").child(key).setValue(usr);
+                            mDatabase.child("quest_opt").child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(arr[5]).child(allQuest.qid).child("C").child(key).setValue(usr);
 
                             mutableData.setValue(allQuest);
                             return (Transaction.success(mutableData));
@@ -939,7 +930,7 @@ public class frag4 extends Fragment {
 
         public void updatewallet(final float mybid,final String qid)
         {
-            DatabaseReference mRef=FirebaseDatabase.getInstance().getReference().child("LeaderBoard").child(arr[1]).child(arr[2]+arr[3]).child(uId);
+            DatabaseReference mRef=FirebaseDatabase.getInstance().getReference().child("LeaderBoard").child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]).child(uId);
             mRef.runTransaction(new Transaction.Handler() {
                 @NonNull
                 @Override

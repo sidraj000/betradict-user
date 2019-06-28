@@ -6,8 +6,47 @@ android:background="@mipmap/bg"
 android:layout_height="match_parent"
 tools:context=".frags.frag5">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/aldrich"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="Option"
+            android:textSize="18dp" />
 
-<android.support.v7.widget.RecyclerView
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/aldrich"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="Rate"
+            android:textSize="18dp"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/aldrich"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="Bid"
+            android:textSize="18dp"/>
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
+    </LinearLayout>
+    <android.support.v7.widget.RecyclerView
+    android:layout_marginTop="40dp"
     android:id="@+id/questAnsPList"
     android:layout_width="match_parent"
     android:layout_height="match_parent"

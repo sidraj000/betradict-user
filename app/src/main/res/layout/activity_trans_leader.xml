@@ -9,31 +9,24 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/trans_l">
+        android:id="@+id/trans_l"
+        android:background="@mipmap/appbg">
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:text="Top betradicters this week"
-            android:fontFamily="@font/aldrich"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:textSize="20sp"/>
-    <ImageView
+
+        <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="center_horizontal"
         android:src="@drawable/ref"
         android:clickable="true"
         android:id="@+id/btnRef"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
         android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
         />
-    </LinearLayout>
     </RelativeLayout>
 
     <android.support.design.widget.NavigationView

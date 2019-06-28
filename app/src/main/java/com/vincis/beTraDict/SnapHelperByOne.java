@@ -9,10 +9,8 @@ import android.widget.ImageView;
 public class SnapHelperByOne extends LinearSnapHelper {
      ImageView r,l;
      Integer s;
-    public SnapHelperByOne(ImageView ri, ImageView lf, int size) {
-        r=ri;
-        l=lf;
-        s=size;
+    public SnapHelperByOne() {
+
     }
 
     @Override

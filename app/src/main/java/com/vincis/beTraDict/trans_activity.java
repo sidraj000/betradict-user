@@ -89,6 +89,13 @@ public class trans_activity extends AppCompatActivity implements NavigationView.
         FragmentManager fm = getSupportFragmentManager();
         cricketMList fragment = new cricketMList();
         fm.beginTransaction().replace(R.id.trans, fragment).commit();
+        fragment_pools fragmentPools=new fragment_pools();
+        Bundle b=new Bundle();
+        String array[]={"cricket","icc_wc_2019_g35","normal"};
+        b.putStringArray("details",array);
+        fragmentPools.setArguments(b);
+        fragmentPools.setArguments(b);
+        fm.beginTransaction().replace(R.id.tranFragPool,fragmentPools).commit();
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

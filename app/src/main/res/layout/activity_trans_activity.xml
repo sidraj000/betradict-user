@@ -9,45 +9,80 @@
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EBE7E7"
+    android:background="@mipmap/appbg"
    >
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="270dp"
-        android:background="@mipmap/navbg"
-        android:orientation="horizontal">
-
-        <android.support.v7.widget.CardView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:elevation="12dp"
-            android:id="@+id/view2"
-            android:layout_marginTop="5dp"
-            app:cardCornerRadius="20dp"
-            android:innerRadius="0dp"
-            android:shape="ring">
-
+        android:orientation="horizontal"
+        >
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
             <ImageView
-                android:id="@+id/btnnn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:src="@mipmap/navimage"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
+            <android.support.v7.widget.CardView
+                android:id="@+id/view2"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center"
-                android:src="@mipmap/appl"></ImageView>
-        </android.support.v7.widget.CardView>
+                android:layout_marginTop="5dp"
+                android:elevation="12dp"
+                android:innerRadius="0dp"
+                android:layout_gravity="right"
+                android:shape="ring"
+                app:cardCornerRadius="20dp">
+
+                <ImageView
+                    android:id="@+id/btnnn"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="5dp"
+                    android:src="@mipmap/appl"></ImageView>
+            </android.support.v7.widget.CardView>
+
+        </LinearLayout>
 
     </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/trans"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="42dp"
+        android:layout_marginLeft="5dp"
+        android:background="#00FFFFFF"></RelativeLayout>
+
+    </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="220dp"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
-        android:background="#00FFFFFF"
-        android:id="@+id/trans"></RelativeLayout>
-
-    </RelativeLayout>
+        android:id="@+id/tranFragPool"></RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="270dp"
+        ></RelativeLayout>
    <android.support.design.widget.NavigationView
        app:headerLayout="@layout/header"
         android:id="@+id/nav_view4"

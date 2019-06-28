@@ -23,14 +23,27 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
-    <TextView
-        android:id="@+id/walletbal"
-        android:layout_width="200dp"
-        android:layout_height="30dp"
-        android:layout_gravity="right"
-        android:text="Balance"
-        android:textSize="25dp"
-        android:gravity="center"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="right">
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@mipmap/appl"/>
+        <TextView
+            android:id="@+id/walletbal"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_gravity="right"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="Balance"
+            android:textSize="20dp"
+            android:layout_marginRight="20dp"
+            android:gravity="center"/>
+    </LinearLayout>
+
         <android.support.v7.widget.RecyclerView
         android:id="@+id/questList"
         android:layout_width="match_parent"
@@ -189,28 +202,30 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:id="@+id/tvBid"
                         android:textColor="#ffffff"
                         android:textSize="20dp"
                        android:layout_gravity="start"
+                        android:gravity="center"
                         android:clickable="true"
                         android:text="Bids Details"/>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:orientation="vertical">
-
                     <Button
-                        android:id="@+id/btnRun"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:id="@+id/btnBid"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="10dp"
                         android:layout_gravity="end"
-                        android:text="runaway"
-                        android:textColor="@color/colorPrimaryDark" />
+                        android:clickable="true"
+                        android:text="Bids Details"/>
                 </LinearLayout>
 
             </LinearLayout>

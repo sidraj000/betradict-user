@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout mDrawer;
     JSONArray lastOver;
     Button btnRun;
+    ImageView btnRef;
     String data;
     ImageView iv1,iv2;
     TextView tvscore1,lastball;
@@ -103,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mRecyclerBall=findViewById(R.id.mRecyclerBall);
         lastball=findViewById(R.id.lastball);
         progressBar=findViewById(R.id.progressBar2);
+        btnRef=findViewById(R.id.btnRefScore);
         mRecyclerBall.setLayoutManager(new LinearLayoutManager(MainActivity.this,LinearLayoutManager.HORIZONTAL,true));
      // mToggle = new ActionBarDrawerToggle(MainActivity.this, mDrawer, R.string.open, R.string.close);
         //mDrawer.addDrawerListener(mToggle);
@@ -167,6 +169,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 View header=navigationView.getHeaderView(0);
                 tvU=header.findViewById(R.id.tvUName);
                 tvU.setText("Welcome! "+FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+            }
+        });
+        btnRef.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AuthenticateTask().execute();
+                new RetrieveFeedTask().execute();
             }
         });
 

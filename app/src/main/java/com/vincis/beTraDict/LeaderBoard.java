@@ -70,7 +70,7 @@ public class LeaderBoard extends Fragment {
         b=getArguments();
         arr=b.getStringArray("details");
         mFriendsReference = FirebaseDatabase.getInstance().getReference()
-                .child("LeaderBoard").child(arr[1]).child(arr[2]+arr[3]);
+                .child("LeaderBoard").child(arr[0]).child(arr[1]).child(arr[2]).child(arr[3]);
         mManager = new LinearLayoutManager(getContext());
         mManager.setReverseLayout(true);
         mManager.setStackFromEnd(true);

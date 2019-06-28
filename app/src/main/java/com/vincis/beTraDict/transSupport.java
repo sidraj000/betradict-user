@@ -29,9 +29,9 @@ public class transSupport extends AppCompatActivity  implements NavigationView.O
         mDrawer.addDrawerListener(mToggle);
         NavigationView navigationView = findViewById(R.id.nav_viewts);
         navigationView.setNavigationItemSelectedListener(transSupport.this);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+      //  getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         navigationView.setItemIconTintList(null);
-        mToggle.syncState();
+        //mToggle.syncState();
 
         View header=navigationView.getHeaderView(0);
         tvU=header.findViewById(R.id.tvUName);
