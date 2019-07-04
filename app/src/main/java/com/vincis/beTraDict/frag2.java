@@ -29,7 +29,7 @@ public class frag2 extends Fragment {
         // Inflate the layout for this fragment
       View view= inflater.inflate(R.layout.fragment_frag2, container, false);
       tv=view.findViewById(R.id.link);
-     final String url="https://www.vinciis.com/stats-guru";
+     final String url="https://www.vinciis.com/stats-gurug";
      tv.setOnClickListener(new View.OnClickListener() {
          @Override
          public void onClick(View v) {

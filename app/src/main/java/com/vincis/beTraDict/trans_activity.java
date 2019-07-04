@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -26,6 +27,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -50,7 +52,7 @@ public class trans_activity extends AppCompatActivity implements NavigationView.
     private ActionBarDrawerToggle mToggle;
     String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
     TextView tvU;
-    ImageView btn;
+    ImageView btn,nav;
     FirebaseFunctions mFunction;
     NavigationView navigationView;
     FirebaseUser mUser;
@@ -64,6 +66,7 @@ public class trans_activity extends AppCompatActivity implements NavigationView.
         // mToggle = new ActionBarDrawerToggle(trans_activity.this, mDrawer, R.string.open, R.string.close);
         //mDrawer.addDrawerListener(m*Toggle);
       navigationView = findViewById(R.id.nav_view4);
+        navigationView.setItemIconTintList(null);
       mUser=FirebaseAuth.getInstance().getCurrentUser();
         // navigationView.setItemIconTintList(null);
         // View header=navigationView.getHeaderView(0);
@@ -91,12 +94,39 @@ public class trans_activity extends AppCompatActivity implements NavigationView.
         fm.beginTransaction().replace(R.id.trans, fragment).commit();
         fragment_pools fragmentPools=new fragment_pools();
         Bundle b=new Bundle();
+        FirebaseDatabase.getInstance().getReference().child("match").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         String array[]={"cricket","icc_wc_2019_g35","normal"};
         b.putStringArray("details",array);
         fragmentPools.setArguments(b);
         fragmentPools.setArguments(b);
         fm.beginTransaction().replace(R.id.tranFragPool,fragmentPools).commit();
-        btn.setOnClickListener(new View.OnClickListener() {
+        nav=findViewById(R.id.navimg);
+        nav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mDrawer.openDrawer(Gravity.LEFT);
@@ -151,36 +181,7 @@ public class trans_activity extends AppCompatActivity implements NavigationView.
 
     }
 
-    /*  @Override
-      public boolean onCreateOptionsMenu(Menu menu) {
-          // Inflate the menu; this adds items to the action bar if it is present.
-          getMenuInflater().inflate(R.menu.menu_main, menu);
-          final MenuItem menuItem = menu.findItem(R.id.cart_action);
-          DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference().child("users").child(uid).child("wallet");
-          mDatabase.addValueEventListener(new ValueEventListener() {
-              @Override
-              public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                  Wallet wallet=dataSnapshot.getValue(Wallet.class);
-                  menuItem.setIcon(Converter.convertLayoutToImage(trans_activity.this,(int)wallet.balance,R.drawable.wallet));
 
-              }
-
-              @Override
-              public void onCancelled(@NonNull DatabaseError databaseError) {
-
-              }
-          });
-          menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-              @Override
-              public boolean onMenuItemClick(MenuItem item) {
-                 // startActivity(new Intent(trans_activity.this, wallet_trans.class));
-                  return false;
-              }
-          });
-
-          return true;
-      }
-  */
 
     @Override
     public void onBackPressed() {
@@ -221,7 +222,6 @@ public class trans_activity extends AppCompatActivity implements NavigationView.
         if(id==R.id.home)
         {
             startActivity(new Intent(this,trans_activity.class));
-            finish();
         }
 
         if(id==R.id.logout)
@@ -233,18 +233,15 @@ public class trans_activity extends AppCompatActivity implements NavigationView.
         if(id==R.id.wallet)
         {
             startActivity(new Intent(this,wallet_trans.class));
-            finish();
         }
 
         if(id==R.id.prevml)
         {
             startActivity(new Intent(this, trans_prevmatchList.class));
-            finish();
         }
         if(id==R.id.support)
         {
             startActivity(new Intent(this, transSupport.class));
-            finish();
         }
 
 

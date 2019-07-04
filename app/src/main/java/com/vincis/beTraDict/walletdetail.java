@@ -13,7 +13,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,6 +37,9 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class walletdetail extends Fragment {
+    ImageView ivWallet;
+    ImageView ivVips;
+    TextView tabRefer;
     String uid;
     private RecyclerView mRecycler;
     private WalletAdapter mAdapter;
@@ -69,6 +74,66 @@ public class walletdetail extends Fragment {
         mRecycler.setLayoutManager(mManager);
         uid=FirebaseAuth.getInstance().getCurrentUser().getUid();
         we=view.findViewById(R.id.we);
+        ivWallet=view.findViewById(R.id.tabWWallet);
+        tabRefer=view.findViewById(R.id.tabReferText);
+        ivVips=view.findViewById(R.id.tabVips);
+
+        final FirebaseUser mUser=FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseDatabase.getInstance().getReference().child("users").child(mUser.getUid()).child("wallet").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Wallet wallet=dataSnapshot.getValue(Wallet.class);
+                ivWallet.setImageDrawable(Converter.convertLayoutToImage(getContext(),(int)wallet.balance,R.mipmap.appl));
+                ivVips.setImageDrawable(Converter.convertLayoutToImage(getContext(),(int)wallet.trollars,R.mipmap.vinciis));
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        ivWallet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                startActivity(new Intent(getContext(),ProfileActivity.class));
+            }
+        });
+        tabRefer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent waIntent = new Intent(Intent.ACTION_SEND);
+                waIntent.setType("text/plain");
+
+                waIntent.setPackage("com.whatsapp");
+                if (waIntent != null) {
+                    FirebaseDatabase.getInstance().getReference().child("versionName").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            String tex=dataSnapshot.child("uri").getValue().toString();
+                            String text = "Download betradict "+tex+" and get 100 trollars free to play by using code "+mUser.getUid().substring(0,6);
+                            waIntent.putExtra(Intent.EXTRA_TEXT, text);
+                            startActivity(Intent.createChooser(waIntent, "Share with"));
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                } else {
+                    Toast.makeText(getContext(),"WhatsApp not Installed", Toast.LENGTH_SHORT)
+                            .show();
+                }
+            }
+        });
+        ivVips.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(),vipsActivity.class));
+            }
+        });
         return view;
 
     }
@@ -162,7 +227,7 @@ public class walletdetail extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull WalletViewHolder walletViewHolder, int i) {
+        public void onBindViewHolder(@NonNull final WalletViewHolder walletViewHolder, final int i) {
             String det=null;
             String formattedDateString=null;
 
@@ -175,20 +240,47 @@ public class walletdetail extends Fragment {
 
              else if(i>0){
                  we.setVisibility(View.GONE);
-            DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+            DateFormat formatter = new SimpleDateFormat("ddd/MM/yyyy");
             Date currentDate = trans.get(i).date;
            formattedDateString = formatter.format(currentDate);
             walletViewHolder.tvAmt.setText(Float.toString(trans.get(i).amt));
             walletViewHolder.tvDate.setText(formattedDateString);
-
             if (trans.get(i).amt > 0) {
                 walletViewHolder.tvAmt.setTextColor(Color.BLUE);
-                det="Deposited " + trans.get(i).amt + " trollars for " + trans.get(i).qid;
-                walletViewHolder.tvDet.setText(det);
+                FirebaseDatabase.getInstance().getReference().child("match").child("cricket").child(trans.get(i).Mid).addValueEventListener(
+                        new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                               Match match=dataSnapshot.getValue(Match.class);
+
+                                walletViewHolder.tvDet.setText("Deposited " + trans.get(i).amt + " trollars for " + trans.get(i).poolType + " of match " + match.teamA+" vs "+match.teamB);
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
             } else {
                 walletViewHolder.tvAmt.setTextColor(Color.RED);
-                det="Deducted " + trans.get(i).amt * -1 + " trollars for " + trans.get(i).qid;
-                walletViewHolder.tvDet.setText(det);
+                FirebaseDatabase.getInstance().getReference().child("match").child("cricket").child(trans.get(i).Mid).addValueEventListener(
+                        new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                Match match=dataSnapshot.getValue(Match.class);
+
+                                walletViewHolder.tvDet.setText("Deducted " + trans.get(i).amt*-1 + " trollars for " + trans.get(i).poolType + " of match " + match.teamA+" vs "+match.teamB);
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
             }
 
 
@@ -201,25 +293,6 @@ public class walletdetail extends Fragment {
              walletViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                  @Override
                  public void onClick(View v) {
-
-                     DatabaseReference md=FirebaseDatabase.getInstance().getReference().child("quest_usr").child(uid).child("cricket").child(trans.get(k).Mid).child(trans.get(k).type).child(trans.get(k).qid);
-                     md.addListenerForSingleValueEvent(new ValueEventListener() {
-                         @Override
-                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                             q=dataSnapshot.getValue(Quest.class);
-                             Bundle b=new Bundle();
-                              String arr[]={p,trans.get(k).Mid,da,q.ques,q.opt1,q.opt2,q.opt3,Float.toString(q.mybid),Float.toString(q.myrate),q.myans,q.cans};
-                             Intent intent=new Intent(getActivity(),wallet_click.class);
-                             intent.putExtra("det",arr);
-                             startActivity(intent);
-                         }
-
-                         @Override
-                         public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                         }
-                     });
-
                  }
              });
 

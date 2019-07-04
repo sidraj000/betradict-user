@@ -5,20 +5,19 @@ import com.vincis.beTraDict.transactions;
 import java.util.List;
 
 public class Wallet {
+    public float trollars;
     public float balance;
-    public float lastmatch;
+    public Integer cashoutCards;
     public List<transactions> lastTransactions;
     public Wallet()
     {
     }
+    public Wallet(float trollars, float balance, Integer cashoutCards, List<transactions> lastTransactions) {
+        this.trollars = trollars;
+        this.balance = balance;
+        this.cashoutCards = cashoutCards;
+        this.lastTransactions = lastTransactions;
+    }
 
-    public Wallet(float balance, List<transactions> lastTransactions) {
-        this.balance = balance;
-        this.lastTransactions = lastTransactions;
-    }
-    public Wallet(float balance, float lastmatch, List<transactions> lastTransactions) {
-        this.balance = balance;
-        this.lastmatch = lastmatch;
-        this.lastTransactions = lastTransactions;
-    }
+
 }

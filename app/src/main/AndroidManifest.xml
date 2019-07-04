@@ -9,7 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".bidsDetails"></activity>
+        <activity android:name=".vipsActivity"></activity>
+        <activity android:name=".profilepage" />
+        <activity android:name=".checkLatestVersion" />
+        <activity android:name=".enteredPools" />
+        <activity android:name=".bidsDetails" />
         <activity android:name=".trans_commentry" />
         <activity android:name=".trans_scoreCard" />
         <activity android:name=".trans_leader" />
@@ -17,9 +21,10 @@
         <activity android:name=".transSupport" />
         <activity android:name=".wallet_trans" />
         <activity android:name=".wallet_click" />
-        <activity android:name=".SelectMatch"/>
-        <activity android:name=".Extra"/>
-        <activity android:name=".Extra2"/>
+        <activity android:name=".SelectMatch" />
+        <activity android:name=".Extra" />
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".Extra2" />
         <activity android:name=".trans_teama_data" />
         <activity
             android:name=".trans_activity"
@@ -28,9 +33,11 @@
             android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Main4Activity" />
-        <activity android:name=".login_act"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".Home_Page"
+        <activity
+            android:name=".login_act"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Home_Page"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -48,6 +55,9 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+        <meta-data
+            android:name="com.razorpay.ApiKey"
+            android:value="rzp_test_Y1tbmrjJySt3F4" />
     </application>
 
 </manifest>

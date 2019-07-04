@@ -21,7 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class wallet_trans extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    TextView tv;
+
     String uid= FirebaseAuth.getInstance().getCurrentUser().getUid();
     DatabaseReference mRef=FirebaseDatabase.getInstance().getReference();
     private DrawerLayout mDrawer;
@@ -35,7 +35,6 @@ public class wallet_trans extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wallet_trans);
         FragmentManager fm=getSupportFragmentManager();
-        tv=findViewById(R.id.tBal);
         mDrawer = findViewById(R.id.d1);
         mToggle = new ActionBarDrawerToggle(wallet_trans.this, mDrawer, R.string.open, R.string.close);
         mDrawer.addDrawerListener(mToggle);
@@ -52,8 +51,7 @@ public class wallet_trans extends AppCompatActivity implements NavigationView.On
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Wallet wallet=dataSnapshot.getValue(Wallet.class);
-                tv.setText(Integer.toString((int)(wallet.balance)));
-            }
+             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -103,7 +101,6 @@ public class wallet_trans extends AppCompatActivity implements NavigationView.On
 
         return false;
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

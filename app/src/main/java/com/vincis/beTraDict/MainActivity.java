@@ -105,10 +105,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         lastball=findViewById(R.id.lastball);
         progressBar=findViewById(R.id.progressBar2);
         btnRef=findViewById(R.id.btnRefScore);
-        mRecyclerBall.setLayoutManager(new LinearLayoutManager(MainActivity.this,LinearLayoutManager.HORIZONTAL,true));
+        mRecyclerBall.setLayoutManager(new LinearLayoutManager(MainActivity.this,LinearLayoutManager.HORIZONTAL,false));
      // mToggle = new ActionBarDrawerToggle(MainActivity.this, mDrawer, R.string.open, R.string.close);
         //mDrawer.addDrawerListener(mToggle);
         navigationView = findViewById(R.id.nav_view);
+        navigationView.setItemIconTintList(null);
         navigationView.setNavigationItemSelectedListener(this);
      //   View header=navigationView.getHeaderView(0);
       //  navigationView.setItemIconTintList(null);
@@ -227,25 +228,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 */
-if(arrdata[3].equals("a")) {
-    new AuthenticateTask().execute();
-    new RetrieveFeedTask().execute();
-    FragmentManager fm = getSupportFragmentManager();
-    frag_levels fragment = new frag_levels();
-    fragment.setArguments(arr);
-    fm.beginTransaction().replace(R.id.transmanin, fragment).commit();
-}
-else if(arrdata[3].equals("b"))
-{
-    new AuthenticateTask().execute();
-    new RetrieveFeedTask().execute();
-    FragmentManager fm = getSupportFragmentManager();
-    fragment_pools fragment = new fragment_pools();
-    fragment.setArguments(arr);
-    fm.beginTransaction().replace(R.id.transmanin, fragment).commit();
 
-}
-else if(arrdata[4].equals("c"))
+if(arrdata[4].equals("c"))
 {
     new AuthenticateTask().execute();
     new RetrieveFeedTask().execute();
@@ -340,7 +324,7 @@ else if(arrdata[4].equals("c"))
                 }
             }
             catch(Exception e) {
-              Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            //  Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 return null;
             }
         }
@@ -540,7 +524,7 @@ else if(arrdata[4].equals("c"))
 
                     }
                 } catch (JSONException e) {
-                    Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                  //  Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             } else {}
         }
@@ -661,36 +645,7 @@ else if(arrdata[4].equals("c"))
         return true;
     }
 
-    private void onChangeTab(int i) {
-        if(i==0)
-        {
-            one.setImageResource(R.mipmap.quiz);
-            two.setImageResource(R.mipmap.ans);
-            three.setImageResource(R.mipmap.analytics);
 
-            viewPager.setCurrentItem(0);
-
-        }
-
-        if(i==1)
-        {
-            one.setImageResource(R.mipmap.question);
-            two.setImageResource(R.mipmap.ansc);
-            three.setImageResource(R.mipmap.analytics);
-            viewPager.setCurrentItem(1);
-        }
-        if(i==2)
-        {
-            one.setImageResource(R.mipmap.question);
-            two.setImageResource(R.mipmap.ans);
-            three.setImageResource(R.mipmap.analyticsc);
-
-            viewPager.setCurrentItem(2);
-
-        }
-
-
-    }
 
 
     @Override

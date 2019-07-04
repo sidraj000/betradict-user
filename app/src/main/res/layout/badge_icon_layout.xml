@@ -12,7 +12,7 @@
             android:id="@+id/icon_badge"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:src="@drawable/wallet" />
+            android:src="@mipmap/appl" />
 
 
         <FrameLayout
@@ -32,8 +32,8 @@
                 android:paddingRight="10dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="10dp"
-                android:text="20000"
-                android:textColor="#ffffff"
+                android:text="0"
+                android:textColor="#000000"
                 android:textSize="40sp"
                 android:textStyle="bold" />
 

@@ -29,12 +29,12 @@ public class trans_prevmatchList extends AppCompatActivity implements Navigation
         mDrawer.addDrawerListener(mToggle);
         NavigationView navigationView = findViewById(R.id.nav_viewtml);
         navigationView.setNavigationItemSelectedListener(trans_prevmatchList.this);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+       // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         View header=navigationView.getHeaderView(0);
         tvU=header.findViewById(R.id.tvUName);
         tvU.setText("Welcome! "+FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
         navigationView.setItemIconTintList(null);
-        mToggle.syncState();
+       mToggle.syncState();
 
 
 

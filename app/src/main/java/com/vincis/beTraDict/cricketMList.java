@@ -7,20 +7,25 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -37,9 +42,16 @@ import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -61,6 +73,8 @@ public class cricketMList extends Fragment {
     FirebaseUser muser;
     Animation animation;
     ImageView ivAnime;
+
+
 
 
     final String uId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -86,6 +100,9 @@ public class cricketMList extends Fragment {
         mRecycler.setHasFixedSize(true);
         mRecycler.setLayoutManager(mManager);
        // ivAnime=view.findViewById(R.id.ivanime2);
+
+
+
         animation= AnimationUtils.loadAnimation(getContext(),R.anim.rotate);
 
         return view;
@@ -103,9 +120,17 @@ public class cricketMList extends Fragment {
     public void onStart() {
         super.onStart();
 
-        mAdapter = new cListAdapter(getContext(), mFriendsReference);
+        mAdapter = new cListAdapter(getContext(), mFriendsReference,0);
         mRecycler.setAdapter(mAdapter);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mAdapter = new cListAdapter(getContext(), mFriendsReference,0);
+        mRecycler.setAdapter(mAdapter);
+    }
+
 
     @Override
     public void onStop() {
@@ -117,6 +142,7 @@ public class cricketMList extends Fragment {
 
       ImageView ivTeamA,ivTeamB,greenButton;
       TextView tvTeamA,tvTeamB,tvDate;
+      RelativeLayout itemCard;
      TextView tvCounter;
 
         public cViewHolder(View itemView) {
@@ -129,6 +155,7 @@ public class cricketMList extends Fragment {
             tvCounter=itemView.findViewById(R.id.tvCounter);
             greenButton=itemView.findViewById(R.id.greenButton);
             greenButton.setVisibility(View.GONE);
+            itemCard=itemView.findViewById(R.id.item_card);
         }
     }
 
@@ -137,13 +164,15 @@ public class cricketMList extends Fragment {
     private class cListAdapter extends RecyclerView.Adapter<cViewHolder> {
         private Context mContext;
         private DatabaseReference mRef;
+        public Integer count;
 
         public List<Match> mCMatch=new ArrayList<>();
         public List<String> cId=new ArrayList<>();
 
 
-        public cListAdapter(Context context, DatabaseReference ref) {
+        public cListAdapter(Context context, DatabaseReference ref,Integer bool) {
             mContext = context;
+            count=bool;
             mRef = ref;
             Query query=mRef.orderByChild("date/time");
             //mRef=FirebaseDatabase.getInstance().getReference().child("match").child("cricket");
@@ -153,6 +182,11 @@ public class cricketMList extends Fragment {
                     Match cMatch=dataSnapshot.getValue(Match.class);
                     if(cMatch.status==0) {
                         mCMatch.add(cMatch);
+                        if(mCMatch.size()==1)
+                        {
+                            viewModel.setText(mCMatch.get(0).id);
+
+                        }
                         String key = dataSnapshot.getKey();
                         cId.add(key);
                         notifyItemInserted(mCMatch.size() - 1);
@@ -224,8 +258,16 @@ public class cricketMList extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull final cViewHolder cViewHolder, int i) {
-            
+
             if(mCMatch.get(i).status==0) {
+                if(count==i)
+                {
+                    cViewHolder.itemCard.setBackgroundColor(getResources().getColor(R.color.offred));
+                }
+                else {
+
+                    cViewHolder.itemCard.setBackgroundColor(getResources().getColor(R.color.cardcolor));
+                }
                 final int k = i;
                 cViewHolder.tvTeamA.setText(mCMatch.get(i).teamA);
                 cViewHolder.tvTeamB.setText(mCMatch.get(i).teamB);
@@ -320,7 +362,10 @@ public class cricketMList extends Fragment {
               cViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                            viewModel.setText(mCMatch.get(k).id);
+                        cViewHolder.itemCard.setBackgroundColor(getResources().getColor(R.color.offred));
+                        notifyDataSetChanged();
+                        count=k;
+                        viewModel.setText(mCMatch.get(k).id);
 
                     }
                 });
@@ -370,6 +415,9 @@ public class cricketMList extends Fragment {
 
         }
     }
+
+
+
 
 
 }

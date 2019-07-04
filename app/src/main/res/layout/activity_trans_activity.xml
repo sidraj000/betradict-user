@@ -23,8 +23,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/navimg"
+                android:layout_width="16dp"
+                android:layout_height="40dp"
                 android:layout_marginTop="5dp"
                 android:src="@mipmap/navimage"/>
         </LinearLayout>
@@ -36,6 +37,7 @@
             android:layout_weight="1">
             <android.support.v7.widget.CardView
                 android:id="@+id/view2"
+                android:layout_marginRight="5dp"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="5dp"
@@ -46,13 +48,13 @@
                 app:cardCornerRadius="20dp">
 
                 <ImageView
+
                     android:id="@+id/btnnn"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:layout_gravity="center"
-                    android:layout_marginRight="5dp"
                     android:src="@mipmap/appl"></ImageView>
             </android.support.v7.widget.CardView>
 
@@ -75,8 +77,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="220dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp"
         android:id="@+id/tranFragPool"></RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -91,5 +91,6 @@
         android:layout_gravity="start"
        android:background="#ffffff"
         app:menu="@menu/nav_menu"></android.support.design.widget.NavigationView>
+
 
 </android.support.v4.widget.DrawerLayout>

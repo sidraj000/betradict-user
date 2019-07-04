@@ -4,21 +4,35 @@ import java.util.Date;
 
 public class transactions {
     public float amt;
-    public String qid;
     public String Mid;
+    public String poolId;
+    public String poolType;
     public Date date;
-    public String type;
+
 
     public transactions()
     {
 
     }
 
-    public transactions(float amt, String qid, String mid, Date date, String type) {
+    public transactions(float amt, String mid, String poolId, String poolType, Date date) {
         this.amt = amt;
-        this.qid = qid;
         Mid = mid;
+        this.poolId = poolId;
+        this.poolType = poolType;
         this.date = date;
-        this.type = type;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

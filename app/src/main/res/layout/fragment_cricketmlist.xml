@@ -22,4 +22,5 @@
         android:layout_gravity="center"
         android:visibility="gone"
         android:src="@mipmap/vinciis"/>
+
 </FrameLayout>

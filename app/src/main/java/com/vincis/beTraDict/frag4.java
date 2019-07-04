@@ -101,7 +101,7 @@ public class frag4 extends Fragment {
     float rate1=0,rate2=0,rate3=0;
     public String accesstoken;
     ImageView iv1,iv2,ivCancel;
-    TextView tvquest, tvRate1, tvRate2, tvRate3,tvBid,tvMsgs;
+    TextView tvquest, tvRate1, tvRate2, tvRate3;
     EditText etAmt;
     Button btn1;
     Button btn2;
@@ -145,9 +145,7 @@ public class frag4 extends Fragment {
             etAmt = view.findViewById(R.id.etAmt);
             ll=view.findViewById(R.id.ll);
             fl=view.findViewById(R.id.framefade);
-            tvBid=view.findViewById(R.id.tvBid);
             btnBid=view.findViewById(R.id.btnBid);
-            tvMsgs=view.findViewById(R.id.tvmsgs);
             leaderboard=view.findViewById(R.id.one);
             dQuest=view.findViewById(R.id.two);
             guruG=view.findViewById(R.id.three);
@@ -306,6 +304,11 @@ public class frag4 extends Fragment {
     public void onStop() {
         super.onStop();
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        count=0;
+    }
 
 
 
@@ -458,6 +461,8 @@ public class frag4 extends Fragment {
                 ivAnime.setVisibility(View.GONE);
             ll.setVisibility(View.GONE);
             final Quest quest = mQuest.get(i);
+            friendViewHolder.tvHead.setText(quest.heading);
+
 
             guruG.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -523,7 +528,8 @@ public class frag4 extends Fragment {
                             }
                         }
 
-                        friendViewHolder.tvMaxRate.setText(Float.toString(Math.max(rate1,Math.max(rate2,rate3))));
+                        friendViewHolder.tvMaxRate.setText("x" +Float.toString(Math.max(rate1,Math.max(rate2,rate3))));
+                        friendViewHolder.tvHead.setText(quest.heading);
 
                     }
                 }
@@ -532,7 +538,6 @@ public class frag4 extends Fragment {
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                 }
             });
-            friendViewHolder.tvHead.setText(quest.heading);
             if(quest.myans.equals("U"))
             {
                 friendViewHolder.tvHead.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
@@ -556,11 +561,11 @@ public class frag4 extends Fragment {
                             else {
                                 etAmt.setVisibility(View.GONE);
                             }
-
                             count=1;
                             ll.setVisibility(View.VISIBLE);
                         float a = (float) 0.5;
                         fl.setAlpha(a);
+                        tvquest.setText(quest.ques);
                             if(quest.myans.equals("U"))
                             {
                                 btn1.setBackgroundColor(getResources().getColor(R.color.white));
@@ -569,11 +574,8 @@ public class frag4 extends Fragment {
                                 btn1.setText(quest.opt1);
                                 btn2.setText(quest.opt2);
                                 btn3.setText(quest.opt3);
-                                tvBid.setVisibility(View.GONE);
                             }
                             else {
-                                tvBid.setText("Last Bid:"+quest.mybid);
-                                tvBid.setVisibility(View.VISIBLE);
                                 if(quest.myans.equals("A"))
                                 {
                                     btn1.setBackgroundColor(getResources().getColor(R.color.blue));
@@ -609,7 +611,7 @@ public class frag4 extends Fragment {
                                 }
                             }
 
-                        tvquest.setText(quest.ques);
+
                             mdb.addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -823,7 +825,7 @@ public class frag4 extends Fragment {
                         user.wallet.balance=user.wallet.balance+money;
                         Calendar cal = Calendar.getInstance();
                         Date currentDate = cal.getTime();
-                        user.wallet.lastTransactions.add(new transactions(money,qid,arr[1],currentDate,arr[2]));
+                        user.wallet.lastTransactions.add(new transactions(money,arr[1],arr[2],arr[3],currentDate));
                         mutableData.setValue(user);
                         Toast.makeText(mContext, "Successfully done...", Toast.LENGTH_SHORT).show();
                         return (Transaction.success(mutableData));
@@ -946,6 +948,7 @@ public class frag4 extends Fragment {
                 else {
                     amt.Amt=amt.Amt-mybid;
                     mutableData.setValue(amt);
+                    updatetrollars(mybid);
                     return (Transaction.success(mutableData));
                 }
 
@@ -956,6 +959,36 @@ public class frag4 extends Fragment {
 
                     ivAnime.setVisibility(View.GONE);
                     ivAnime.clearAnimation();
+                }
+            });
+        }
+
+        public void updatetrollars(final float mybid)
+        {
+            DatabaseReference mRef=FirebaseDatabase.getInstance().getReference().child("users").child(uId).child("wallet");
+            mRef.runTransaction(new Transaction.Handler() {
+                @NonNull
+                @Override
+                public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
+                    Wallet amt=mutableData.getValue(Wallet.class);
+
+                    if(amt==null)
+                    {
+
+                        Toast.makeText(mContext, "error", Toast.LENGTH_SHORT).show();
+                        return (Transaction.success(mutableData));
+                    }
+                    else {
+                        amt.trollars=amt.trollars-mybid;
+                        mutableData.setValue(amt);
+                        return (Transaction.success(mutableData));
+                    }
+
+                }
+
+                @Override
+                public void onComplete(@Nullable DatabaseError databaseError, boolean b, @Nullable DataSnapshot dataSnapshot) {
+
                 }
             });
         }

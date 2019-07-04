@@ -5,26 +5,18 @@
     android:layout_width="match_parent"
     android:id="@+id/d1"
     android:layout_height="match_parent"
-
-    tools:context=".wallet_trans">
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:id="@+id/wallet_t"
-        android:layout_height="match_parent">
+    tools:context=".wallet_trans"
+    android:background="@mipmap/appbg">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:id="@+id/wallet_t"
+        android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:textSize="30sp"
-            android:text="Text View"
-            android:layout_marginTop="5dp"
-            android:layout_gravity="center_horizontal"
-            android:id="@+id/tBal"/>
-    </LinearLayout>
     </RelativeLayout>
     <android.support.design.widget.NavigationView
         app:headerLayout="@layout/header"

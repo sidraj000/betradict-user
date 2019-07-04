@@ -1,6 +1,8 @@
 package com.vincis.beTraDict;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -27,6 +30,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 
@@ -54,6 +58,9 @@ public class login_act extends AppCompatActivity {
     FirebaseUser currentUser;
     public User u=null;
     TextView tnc;
+    String versionName = "";
+    int versionCode = -1;
+    String currVersion;
 
 
     @Override
@@ -77,11 +84,22 @@ public class login_act extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         tnc=findViewById(R.id.tnc);
         tnc.setMovementMethod(LinkMovementMethod.getInstance());
-    }
+
+        try {
+            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            versionName = packageInfo.versionName;
+            versionCode = packageInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
+            }
     @Override
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
+
         currentUser = mAuth.getCurrentUser();
         if(currentUser!=null)
         {
@@ -90,13 +108,42 @@ public class login_act extends AppCompatActivity {
             DatabaseReference ref=FirebaseDatabase.getInstance().getReference().child("Tokens");
             Token tok=new Token(token);
             ref.child(currentUser.getUid()).setValue(tok);
-                startActivity(new Intent(login_act.this, trans_activity.class));
+            FirebaseDatabase.getInstance().getReference().child("versionName").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    currVersion=dataSnapshot.child("code").getValue().toString();
 
+                    if(currVersion.equals(versionName)) {
+                        startActivity(new Intent(login_act.this, trans_activity.class));
+                    }
+                    else {
+                        startActivity(new Intent(login_act.this,checkLatestVersion.class));
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
 
         }
         else
         {
+            FirebaseDatabase.getInstance().getReference().child("versionName").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    currVersion=dataSnapshot.child("code").getValue().toString();
 
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+            signInButton.setVisibility(View.VISIBLE);
             mGoogleSignInClient.signOut();
             DatabaseReference mRef=FirebaseDatabase.getInstance().getReference().child("match").child("cricket");
             mRef.addChildEventListener(new ChildEventListener() {
@@ -307,44 +354,13 @@ public class login_act extends AppCompatActivity {
         if(user!=null&&a==0)
      {
          writeNewUser(user.getUid(),user.getDisplayName(),user.getEmail(),user.getPhotoUrl().toString());
-         /*  for(int i=0;i<cric.size();i++)
-         {
-             final int k=i;
-             final List<AllQuest>mQ=new ArrayList<>();
-           DatabaseReference mDataB=FirebaseDatabase.getInstance().getReference().child("quest").child("cricket").child(cric.get(i)).child("normal");
-             mDataB.addChildEventListener(new ChildEventListener() {
-                 @Override
-                 public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                     AllQuest quest=dataSnapshot.getValue(AllQuest.class);
-                     mQ.add(quest);
-                     DatabaseReference mDa=FirebaseDatabase.getInstance().getReference();
-                     mDa.child("quest_usr").child(user.getUid()).child("cricket").child(cric.get(k)).child("normal").child(quest.qid).setValue(new Quest(quest.ques,quest.heading,quest.type,quest.opt1,quest.opt2,quest.opt3,quest.qid,0,0,0,"U","U",(float)0));
-                 }
 
-                 @Override
-                 public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                 }
-
-                 @Override
-                 public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-                 }
-
-                 @Override
-                 public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                 }
-
-                 @Override
-                 public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                 }
-             });
-         }*/
-
-
-         startActivity(new Intent(login_act.this, trans_activity.class));
+         if(currVersion.equals(versionName)) {
+             startActivity(new Intent(login_act.this, profilepage.class));
+         }
+         else {
+             startActivity(new Intent(login_act.this,checkLatestVersion.class));
+         }
      }
      else if(user!=null)
         {
@@ -353,7 +369,12 @@ public class login_act extends AppCompatActivity {
             DatabaseReference ref=FirebaseDatabase.getInstance().getReference().child("Tokens");
             Token tok=new Token(token);
             ref.child(currentUser.getUid()).setValue(tok);
-            startActivity(new Intent(login_act.this, trans_activity.class));
+            if(currVersion.equals(versionName)) {
+                startActivity(new Intent(login_act.this, trans_activity.class));
+            }
+            else {
+                startActivity(new Intent(login_act.this,checkLatestVersion.class));
+            }
 
         }
         else
@@ -363,21 +384,19 @@ public class login_act extends AppCompatActivity {
 
     }
     private void writeNewUser(String userId, String name, String email,String pid) {
-        per_det details=new per_det(name,email,pid,userId);
+        per_det details=new per_det(name,email,pid,userId,userId.substring(0,6));
         List<transactions> li=new ArrayList<>();
         Calendar cal = Calendar.getInstance();
         Date currentDate = cal.getTime();
-        li.add(new transactions(0,"u","u",currentDate, "u"));
-        Wallet wall=new Wallet(1000,li);
+        li.add(new transactions(0,"u","u","u",currentDate));
+        Wallet wall=new Wallet(0,100,5,li);
         User usr = new User(details,wall);
         mDatabase.child("users").child(userId).setValue(usr);
         String token= FirebaseInstanceId.getInstance().getToken();
         DatabaseReference ref=FirebaseDatabase.getInstance().getReference().child("Tokens");
+        FirebaseDatabase.getInstance().getReference().child("referrals").child(userId.substring(0,6)).setValue(new Referral(userId.substring(0,6),userId));
         Token tok=new Token(token);
         ref.child(currentUser.getUid()).setValue(tok);
-
-
-
     }
 
 
