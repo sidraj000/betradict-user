@@ -1,0 +1,648 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".AdminStadium"
+    android:orientation="vertical"
+    android:isScrollContainer="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+
+        <TableLayout
+            android:id="@+id/matchtables"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_horizontal"
+            android:paddingTop="20dp">
+
+
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/team1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:textColor="@color/white"
+                    android:layout_marginRight="25dp"
+                    android:layout_gravity="center"
+                    
+                    android:gravity="left"
+                    android:text="Team " />
+
+                <TextView
+                    android:id="@+id/match_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_column="2"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"
+                    android:text="Team"
+                     />
+
+                <TextView
+                    android:id="@+id/team2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="25dp"
+                    android:layout_column="3"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"
+                    android:text="Team Name" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/teamA_opp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:textColor="@color/white"
+                    android:layout_marginRight="25dp"
+                    android:layout_gravity="center"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/team_opp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_column="2"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"
+                    android:text="Against"
+                     />
+
+                <TextView
+                    android:id="@+id/teamB_opp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="3"
+                    android:textColor="@color/white"
+                    android:layout_marginLeft="25dp"
+                    android:layout_gravity="center"
+                    android:text="" />
+            </TableRow>
+
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/teamA_mdate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_column="1"
+                    android:textColor="@color/white"
+                    android:layout_marginRight="25dp"
+                    android:layout_gravity="center"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/team_mdate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_column="2"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"
+                    android:text="Match date"
+                     />
+
+                <TextView
+                    android:id="@+id/teamB_mdate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                   android:layout_column="3"
+                    android:textColor="@color/white"
+                    android:layout_marginLeft="25dp"
+                    android:layout_gravity="center"
+                    android:text="" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/teamA_toss"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_column="1"
+                    android:textColor="@color/white"
+                    android:layout_marginRight="25dp"
+                    android:layout_gravity="center"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/team_toss"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_column="2"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"
+                    android:text="Toss"
+                     />
+
+                <TextView
+                    android:id="@+id/teamB_toss"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                   android:layout_column="3"
+                    android:textColor="@color/white"
+                    android:layout_marginLeft="25dp"
+                    android:layout_gravity="center"
+                    android:text="" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/teamA_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_column="1"
+                    android:textColor="@color/white"
+                    android:layout_marginRight="25dp"
+                    android:layout_gravity="center"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/mscore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_column="2"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"
+                    android:text="Score"
+                     />
+
+                <TextView
+                    android:id="@+id/teamB_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                   android:layout_column="3"
+                    android:textColor="@color/white"
+                    android:layout_marginLeft="25dp"
+                    android:layout_gravity="center"
+                    android:text="" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/teamA_wicketTaken"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_column="1"
+                    android:textColor="@color/white"
+                    android:layout_marginRight="25dp"
+                    android:layout_gravity="center"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/wicketTaken"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_column="2"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"
+                    android:text="Wicket taken"
+                     />
+
+                <TextView
+                    android:id="@+id/teamB_wicketTaken"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_column="3"
+                    android:textColor="@color/white"
+                    android:layout_marginLeft="25dp"
+                    android:layout_gravity="center"
+                    android:text="" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/teamA_total4s"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_column="1"
+                    android:textColor="@color/white"
+                    android:layout_marginRight="25dp"
+                    android:layout_gravity="center"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/teamTotal4s"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_column="2"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"
+                    android:text="Total 4s"
+                     />
+
+                <TextView
+                    android:id="@+id/teamB_total4s"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                   android:layout_column="3"
+                    android:textColor="@color/white"
+                    android:layout_marginLeft="25dp"
+                    android:layout_gravity="center"
+                    android:text="" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/teamA_total6s"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_column="1"
+                    android:textColor="@color/white"
+                    android:layout_marginRight="25dp"
+                    android:layout_gravity="center"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/team_total6s"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_column="2"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"
+                    android:text="Total 6s"
+                     />
+
+                <TextView
+                    android:id="@+id/teamB_total6s"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                   android:layout_column="3"
+                    android:textColor="@color/white"
+                    android:layout_marginLeft="25dp"
+                    android:layout_gravity="center"
+                    android:text="" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/teamA_extras"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_column="1"
+                    android:textColor="@color/white"
+                    android:layout_marginRight="25dp"
+                    android:layout_gravity="center"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/teams_extras"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_column="2"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"
+                    android:text="Extras"
+                     />
+
+                <TextView
+                    android:id="@+id/teamB_extras"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                   android:layout_column="3"
+                    android:textColor="@color/white"
+                    android:layout_marginLeft="25dp"
+                    android:layout_gravity="center"
+                    android:text="" />
+            </TableRow>
+
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/teamA_wideBalls"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_column="1"
+                    android:textColor="@color/white"
+                    android:layout_marginRight="25dp"
+                    android:layout_gravity="center"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/team_wideBalls"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_column="2"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"
+                    android:text="Wide balls"
+                     />
+
+                <TextView
+                    android:id="@+id/teamB_wideBalls"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                   android:layout_column="3"
+                    android:textColor="@color/white"
+                    android:layout_marginLeft="25dp"
+                    android:layout_gravity="center"
+                    android:text="" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/teamA_noBalls"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_column="1"
+                    android:textColor="@color/white"
+                    android:layout_marginRight="25dp"
+                    android:layout_gravity="center"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/team_noBall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_column="2"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"
+                    android:text="No balls"
+                     />
+
+                <TextView
+                    android:id="@+id/teamB_noBalls"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                   android:layout_column="3"
+                    android:textColor="@color/white"
+                    android:layout_marginLeft="25dp"
+                    android:layout_gravity="center"
+                    android:text="" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/teamA_hc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_column="1"
+                    android:textColor="@color/white"
+                    android:layout_marginRight="25dp"
+                    android:layout_gravity="center"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/team_hc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_column="2"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"
+                    android:text="Half Centuries"
+                     />
+
+                <TextView
+                    android:id="@+id/teamB_hc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                   android:layout_column="3"
+                    android:textColor="@color/white"
+                    android:layout_marginLeft="25dp"
+                    android:layout_gravity="center"
+                    android:text="" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/teamA_c"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_column="1"
+                    android:textColor="@color/white"
+                    android:layout_marginRight="25dp"
+                    android:layout_gravity="center"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/team_c"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_column="2"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"
+                    android:text="centuries"
+                     />
+
+                <TextView
+                    android:id="@+id/teamB_c"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                   android:layout_column="3"
+                    android:textColor="@color/white"
+                    android:layout_marginLeft="25dp"
+                    android:layout_gravity="center"
+                    android:text="" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/teamA_tcatches"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_column="1"
+                    android:textColor="@color/white"
+                    android:layout_marginRight="25dp"
+                    android:layout_gravity="center"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/team_tcatches"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_column="2"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"
+                    android:text="total catches"
+                     />
+
+                <TextView
+                    android:id="@+id/teamB_tcatches"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                   android:layout_column="3"
+                    android:textColor="@color/white"
+                    android:layout_marginLeft="25dp"
+                    android:layout_gravity="center"
+                    android:text="" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/teamA_rs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_column="1"
+                    android:textColor="@color/white"
+                    android:layout_marginRight="25dp"
+                    android:layout_gravity="center"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/team_rs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_column="2"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"
+                    android:text="run outs stumps"
+                     />
+
+                <TextView
+                    android:id="@+id/teamB_rs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                   android:layout_column="3"
+                    android:textColor="@color/white"
+                    android:layout_marginLeft="25dp"
+                    android:layout_gravity="center"
+                    android:text="" />
+            </TableRow>
+
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/teamA_bU"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_column="1"
+                    android:textColor="@color/white"
+                    android:layout_marginRight="25dp"
+                    android:layout_gravity="center"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/team_bu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_column="2"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"
+                    android:text="bowler used"
+                     />
+
+                <TextView
+                    android:id="@+id/teamB_bu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                   android:layout_column="3"
+                    android:textColor="@color/white"
+                    android:layout_marginLeft="25dp"
+                    android:layout_gravity="center"
+                    android:text="" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/teamA_result"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_column="1"
+                    android:textColor="@color/white"
+                    android:layout_marginRight="25dp"
+                    android:layout_gravity="center"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/team_result"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_column="2"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"
+                    android:text="result"
+                     />
+
+                <TextView
+                    android:id="@+id/teamB_result"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                   android:layout_column="3"
+                    android:textColor="@color/white"
+                    android:layout_marginLeft="25dp"
+                    android:layout_gravity="center"
+                    android:text="" />
+            </TableRow>
+
+        </TableLayout>
+
+    </LinearLayout>
+</ScrollView>

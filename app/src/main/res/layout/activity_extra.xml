@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Extra"
+    android:id="@+id/activityextra"
+    android:background="@drawable/stdbackground"
+    android:orientation="vertical"
+    app:fontFamily="@font/aldrich" >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:layout_gravity="center_horizontal"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/stadium_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="7dp"
+            android:layout_marginTop="50dp"
+            android:text="stadium_information"
+            android:background="#66FFFFFF"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="20sp"
+            app:fontFamily="@font/aldrich" />
+
+        <TableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/stadium_info"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:layout_gravity="center_horizontal"
+            android:paddingTop="2dp"
+            android:textAlignment="center">
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/venue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:layout_gravity="center"
+                    android:layout_margin="3dp"
+                    android:text="venue"
+                    android:background="#66FFFFFF"
+                    android:textColor="@color/colorPrimaryDark"/>
+
+                <TextView
+                    android:id="@+id/pitchinfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="2"
+                    android:layout_gravity="center"
+                    android:layout_margin="3dp"
+                    android:text="pitch_info"
+                    android:background="#66FFFFFF"
+                    android:textColor="@color/colorPrimaryDark"/>
+
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:id="@+id/svenue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:layout_gravity="center"
+                    android:layout_margin="3dp"
+                    android:text="venue"
+                    android:background="#66FFFFFF"
+                    android:textColor="@color/colorPrimaryDark"/>
+
+                <TextView
+                    android:id="@+id/spitchinfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="2"
+                    android:layout_gravity="center"
+                    android:layout_margin="3dp"
+                    android:maxLines="3"
+                    android:text="pitch info"
+                    android:background="#66FFFFFF"
+                    android:textColor="@color/colorPrimaryDark"/>
+
+            </TableRow>
+        </TableLayout>
+    </LinearLayout>
+
+</LinearLayout>

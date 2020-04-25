@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="#000">
+    <TextView
+        android:id="@+id/tvPosition"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="1st"
+        android:textSize="15dp"
+        android:textColor="@color/white"/>
+
+    <TextView
+        android:id="@+id/tvPrize"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="prize"
+        android:textSize="15dp"
+        android:gravity="center"
+        android:textColor="@color/white"/>
+
+</LinearLayout>

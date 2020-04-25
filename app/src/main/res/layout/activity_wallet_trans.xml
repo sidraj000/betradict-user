@@ -7,17 +7,23 @@
     android:layout_height="match_parent"
     tools:context=".wallet_trans"
     android:background="@mipmap/appbg">
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"/>
+        android:orientation="vertical">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_marginTop="10dp"
         android:id="@+id/wallet_t"
+        android:layout_marginBottom="45dp"
         android:layout_height="match_parent">
-
     </RelativeLayout>
+        <include
+            layout="@layout/tab_bar_wallet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"/>
+    </FrameLayout>
     <android.support.design.widget.NavigationView
         app:headerLayout="@layout/header"
         android:id="@+id/nav_view11"
